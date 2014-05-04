@@ -1,0 +1,502 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4A11FD87191694C800EF8634 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A11FD86191694C800EF8634 /* Foundation.framework */; };
+		4A11FD89191694C800EF8634 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A11FD88191694C800EF8634 /* CoreGraphics.framework */; };
+		4A11FD8B191694C800EF8634 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A11FD8A191694C800EF8634 /* UIKit.framework */; };
+		4A11FD8D191694C800EF8634 /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A11FD8C191694C800EF8634 /* SpriteKit.framework */; };
+		4A11FD93191694C800EF8634 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4A11FD91191694C800EF8634 /* InfoPlist.strings */; };
+		4A11FD95191694C800EF8634 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A11FD94191694C800EF8634 /* main.m */; };
+		4A11FD99191694C800EF8634 /* SpriteAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A11FD98191694C800EF8634 /* SpriteAppDelegate.m */; };
+		4A11FD9C191694C800EF8634 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4A11FD9A191694C800EF8634 /* Main_iPhone.storyboard */; };
+		4A11FD9F191694C800EF8634 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4A11FD9D191694C800EF8634 /* Main_iPad.storyboard */; };
+		4A11FDA2191694C800EF8634 /* SpriteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A11FDA1191694C800EF8634 /* SpriteViewController.m */; };
+		4A11FDA5191694C800EF8634 /* SpriteMyScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A11FDA4191694C800EF8634 /* SpriteMyScene.m */; };
+		4A11FDA7191694C800EF8634 /* Spaceship.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A11FDA6191694C800EF8634 /* Spaceship.png */; };
+		4A11FDA9191694C800EF8634 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4A11FDA8191694C800EF8634 /* Images.xcassets */; };
+		4A11FDB0191694C800EF8634 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A11FDAF191694C800EF8634 /* XCTest.framework */; };
+		4A11FDB1191694C800EF8634 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A11FD86191694C800EF8634 /* Foundation.framework */; };
+		4A11FDB2191694C800EF8634 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A11FD8A191694C800EF8634 /* UIKit.framework */; };
+		4A11FDBA191694C800EF8634 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4A11FDB8191694C800EF8634 /* InfoPlist.strings */; };
+		4A11FDBC191694C800EF8634 /* SpaceShooterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A11FDBB191694C800EF8634 /* SpaceShooterTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4A11FDB3191694C800EF8634 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4A11FD7B191694C800EF8634 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4A11FD82191694C800EF8634;
+			remoteInfo = SpaceShooter;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		4A11FD83191694C800EF8634 /* SpaceShooter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpaceShooter.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4A11FD86191694C800EF8634 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		4A11FD88191694C800EF8634 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		4A11FD8A191694C800EF8634 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		4A11FD8C191694C800EF8634 /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
+		4A11FD90191694C800EF8634 /* SpaceShooter-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SpaceShooter-Info.plist"; sourceTree = "<group>"; };
+		4A11FD92191694C800EF8634 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		4A11FD94191694C800EF8634 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		4A11FD96191694C800EF8634 /* SpaceShooter-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SpaceShooter-Prefix.pch"; sourceTree = "<group>"; };
+		4A11FD97191694C800EF8634 /* SpriteAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SpriteAppDelegate.h; sourceTree = "<group>"; };
+		4A11FD98191694C800EF8634 /* SpriteAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SpriteAppDelegate.m; sourceTree = "<group>"; };
+		4A11FD9B191694C800EF8634 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
+		4A11FD9E191694C800EF8634 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
+		4A11FDA0191694C800EF8634 /* SpriteViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SpriteViewController.h; sourceTree = "<group>"; };
+		4A11FDA1191694C800EF8634 /* SpriteViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SpriteViewController.m; sourceTree = "<group>"; };
+		4A11FDA3191694C800EF8634 /* SpriteMyScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SpriteMyScene.h; sourceTree = "<group>"; };
+		4A11FDA4191694C800EF8634 /* SpriteMyScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SpriteMyScene.m; sourceTree = "<group>"; };
+		4A11FDA6191694C800EF8634 /* Spaceship.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Spaceship.png; sourceTree = "<group>"; };
+		4A11FDA8191694C800EF8634 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		4A11FDAE191694C800EF8634 /* SpaceShooterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SpaceShooterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4A11FDAF191694C800EF8634 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		4A11FDB7191694C800EF8634 /* SpaceShooterTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SpaceShooterTests-Info.plist"; sourceTree = "<group>"; };
+		4A11FDB9191694C800EF8634 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		4A11FDBB191694C800EF8634 /* SpaceShooterTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SpaceShooterTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4A11FD80191694C800EF8634 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4A11FD89191694C800EF8634 /* CoreGraphics.framework in Frameworks */,
+				4A11FD8B191694C800EF8634 /* UIKit.framework in Frameworks */,
+				4A11FD8D191694C800EF8634 /* SpriteKit.framework in Frameworks */,
+				4A11FD87191694C800EF8634 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4A11FDAB191694C800EF8634 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4A11FDB0191694C800EF8634 /* XCTest.framework in Frameworks */,
+				4A11FDB2191694C800EF8634 /* UIKit.framework in Frameworks */,
+				4A11FDB1191694C800EF8634 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4A11FD7A191694C800EF8634 = {
+			isa = PBXGroup;
+			children = (
+				4A11FD8E191694C800EF8634 /* SpaceShooter */,
+				4A11FDB5191694C800EF8634 /* SpaceShooterTests */,
+				4A11FD85191694C800EF8634 /* Frameworks */,
+				4A11FD84191694C800EF8634 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		4A11FD84191694C800EF8634 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4A11FD83191694C800EF8634 /* SpaceShooter.app */,
+				4A11FDAE191694C800EF8634 /* SpaceShooterTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4A11FD85191694C800EF8634 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4A11FD86191694C800EF8634 /* Foundation.framework */,
+				4A11FD88191694C800EF8634 /* CoreGraphics.framework */,
+				4A11FD8A191694C800EF8634 /* UIKit.framework */,
+				4A11FD8C191694C800EF8634 /* SpriteKit.framework */,
+				4A11FDAF191694C800EF8634 /* XCTest.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4A11FD8E191694C800EF8634 /* SpaceShooter */ = {
+			isa = PBXGroup;
+			children = (
+				4A11FD97191694C800EF8634 /* SpriteAppDelegate.h */,
+				4A11FD98191694C800EF8634 /* SpriteAppDelegate.m */,
+				4A11FD9A191694C800EF8634 /* Main_iPhone.storyboard */,
+				4A11FD9D191694C800EF8634 /* Main_iPad.storyboard */,
+				4A11FDA0191694C800EF8634 /* SpriteViewController.h */,
+				4A11FDA1191694C800EF8634 /* SpriteViewController.m */,
+				4A11FDA3191694C800EF8634 /* SpriteMyScene.h */,
+				4A11FDA4191694C800EF8634 /* SpriteMyScene.m */,
+				4A11FDA6191694C800EF8634 /* Spaceship.png */,
+				4A11FDA8191694C800EF8634 /* Images.xcassets */,
+				4A11FD8F191694C800EF8634 /* Supporting Files */,
+			);
+			path = SpaceShooter;
+			sourceTree = "<group>";
+		};
+		4A11FD8F191694C800EF8634 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4A11FD90191694C800EF8634 /* SpaceShooter-Info.plist */,
+				4A11FD91191694C800EF8634 /* InfoPlist.strings */,
+				4A11FD94191694C800EF8634 /* main.m */,
+				4A11FD96191694C800EF8634 /* SpaceShooter-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4A11FDB5191694C800EF8634 /* SpaceShooterTests */ = {
+			isa = PBXGroup;
+			children = (
+				4A11FDBB191694C800EF8634 /* SpaceShooterTests.m */,
+				4A11FDB6191694C800EF8634 /* Supporting Files */,
+			);
+			path = SpaceShooterTests;
+			sourceTree = "<group>";
+		};
+		4A11FDB6191694C800EF8634 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4A11FDB7191694C800EF8634 /* SpaceShooterTests-Info.plist */,
+				4A11FDB8191694C800EF8634 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4A11FD82191694C800EF8634 /* SpaceShooter */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4A11FDBF191694C800EF8634 /* Build configuration list for PBXNativeTarget "SpaceShooter" */;
+			buildPhases = (
+				4A11FD7F191694C800EF8634 /* Sources */,
+				4A11FD80191694C800EF8634 /* Frameworks */,
+				4A11FD81191694C800EF8634 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SpaceShooter;
+			productName = SpaceShooter;
+			productReference = 4A11FD83191694C800EF8634 /* SpaceShooter.app */;
+			productType = "com.apple.product-type.application";
+		};
+		4A11FDAD191694C800EF8634 /* SpaceShooterTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4A11FDC2191694C800EF8634 /* Build configuration list for PBXNativeTarget "SpaceShooterTests" */;
+			buildPhases = (
+				4A11FDAA191694C800EF8634 /* Sources */,
+				4A11FDAB191694C800EF8634 /* Frameworks */,
+				4A11FDAC191694C800EF8634 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4A11FDB4191694C800EF8634 /* PBXTargetDependency */,
+			);
+			name = SpaceShooterTests;
+			productName = SpaceShooterTests;
+			productReference = 4A11FDAE191694C800EF8634 /* SpaceShooterTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4A11FD7B191694C800EF8634 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = Sprite;
+				LastUpgradeCheck = 0510;
+				ORGANIZATIONNAME = "Roselle Milvich";
+				TargetAttributes = {
+					4A11FDAD191694C800EF8634 = {
+						TestTargetID = 4A11FD82191694C800EF8634;
+					};
+				};
+			};
+			buildConfigurationList = 4A11FD7E191694C800EF8634 /* Build configuration list for PBXProject "SpaceShooter" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 4A11FD7A191694C800EF8634;
+			productRefGroup = 4A11FD84191694C800EF8634 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4A11FD82191694C800EF8634 /* SpaceShooter */,
+				4A11FDAD191694C800EF8634 /* SpaceShooterTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4A11FD81191694C800EF8634 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4A11FDA7191694C800EF8634 /* Spaceship.png in Resources */,
+				4A11FDA9191694C800EF8634 /* Images.xcassets in Resources */,
+				4A11FD9F191694C800EF8634 /* Main_iPad.storyboard in Resources */,
+				4A11FD9C191694C800EF8634 /* Main_iPhone.storyboard in Resources */,
+				4A11FD93191694C800EF8634 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4A11FDAC191694C800EF8634 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4A11FDBA191694C800EF8634 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4A11FD7F191694C800EF8634 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4A11FD95191694C800EF8634 /* main.m in Sources */,
+				4A11FDA5191694C800EF8634 /* SpriteMyScene.m in Sources */,
+				4A11FD99191694C800EF8634 /* SpriteAppDelegate.m in Sources */,
+				4A11FDA2191694C800EF8634 /* SpriteViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4A11FDAA191694C800EF8634 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4A11FDBC191694C800EF8634 /* SpaceShooterTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4A11FDB4191694C800EF8634 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4A11FD82191694C800EF8634 /* SpaceShooter */;
+			targetProxy = 4A11FDB3191694C800EF8634 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		4A11FD91191694C800EF8634 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4A11FD92191694C800EF8634 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		4A11FD9A191694C800EF8634 /* Main_iPhone.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4A11FD9B191694C800EF8634 /* Base */,
+			);
+			name = Main_iPhone.storyboard;
+			sourceTree = "<group>";
+		};
+		4A11FD9D191694C800EF8634 /* Main_iPad.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4A11FD9E191694C800EF8634 /* Base */,
+			);
+			name = Main_iPad.storyboard;
+			sourceTree = "<group>";
+		};
+		4A11FDB8191694C800EF8634 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4A11FDB9191694C800EF8634 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		4A11FDBD191694C800EF8634 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		4A11FDBE191694C800EF8634 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		4A11FDC0191694C800EF8634 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "SpaceShooter/SpaceShooter-Prefix.pch";
+				INFOPLIST_FILE = "SpaceShooter/SpaceShooter-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SPRITEKIT_TEXTURE_ATLAS_OUTPUT = YES;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		4A11FDC1191694C800EF8634 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "SpaceShooter/SpaceShooter-Prefix.pch";
+				INFOPLIST_FILE = "SpaceShooter/SpaceShooter-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SPRITEKIT_TEXTURE_ATLAS_OUTPUT = YES;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		4A11FDC3191694C800EF8634 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/SpaceShooter.app/SpaceShooter";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "SpaceShooter/SpaceShooter-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "SpaceShooterTests/SpaceShooterTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		4A11FDC4191694C800EF8634 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/SpaceShooter.app/SpaceShooter";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "SpaceShooter/SpaceShooter-Prefix.pch";
+				INFOPLIST_FILE = "SpaceShooterTests/SpaceShooterTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4A11FD7E191694C800EF8634 /* Build configuration list for PBXProject "SpaceShooter" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4A11FDBD191694C800EF8634 /* Debug */,
+				4A11FDBE191694C800EF8634 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4A11FDBF191694C800EF8634 /* Build configuration list for PBXNativeTarget "SpaceShooter" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4A11FDC0191694C800EF8634 /* Debug */,
+				4A11FDC1191694C800EF8634 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		4A11FDC2191694C800EF8634 /* Build configuration list for PBXNativeTarget "SpaceShooterTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4A11FDC3191694C800EF8634 /* Debug */,
+				4A11FDC4191694C800EF8634 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 4A11FD7B191694C800EF8634 /* Project object */;
+}
