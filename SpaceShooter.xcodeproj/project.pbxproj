@@ -25,6 +25,10 @@
 		4A11FDB2191694C800EF8634 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A11FD8A191694C800EF8634 /* UIKit.framework */; };
 		4A11FDBA191694C800EF8634 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4A11FDB8191694C800EF8634 /* InfoPlist.strings */; };
 		4A11FDBC191694C800EF8634 /* SpaceShooterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A11FDBB191694C800EF8634 /* SpaceShooterTests.m */; };
+		4A11FDC71916957400EF8634 /* MenuScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A11FDC61916957400EF8634 /* MenuScene.m */; };
+		4A11FDCA1916996800EF8634 /* SpaceScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A11FDC91916996800EF8634 /* SpaceScene.m */; };
+		4A11FDCD1916C3B600EF8634 /* Stars.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4A11FDCB1916C3B600EF8634 /* Stars.sks */; };
+		4A11FDCE1916C3B600EF8634 /* spark.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A11FDCC1916C3B600EF8634 /* spark.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +66,12 @@
 		4A11FDB7191694C800EF8634 /* SpaceShooterTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SpaceShooterTests-Info.plist"; sourceTree = "<group>"; };
 		4A11FDB9191694C800EF8634 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4A11FDBB191694C800EF8634 /* SpaceShooterTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SpaceShooterTests.m; sourceTree = "<group>"; };
+		4A11FDC51916957400EF8634 /* MenuScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuScene.h; sourceTree = "<group>"; };
+		4A11FDC61916957400EF8634 /* MenuScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuScene.m; sourceTree = "<group>"; };
+		4A11FDC81916996800EF8634 /* SpaceScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpaceScene.h; sourceTree = "<group>"; };
+		4A11FDC91916996800EF8634 /* SpaceScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpaceScene.m; sourceTree = "<group>"; };
+		4A11FDCB1916C3B600EF8634 /* Stars.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Stars.sks; sourceTree = "<group>"; };
+		4A11FDCC1916C3B600EF8634 /* spark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spark.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +139,12 @@
 				4A11FD9D191694C800EF8634 /* Main_iPad.storyboard */,
 				4A11FDA0191694C800EF8634 /* SpriteViewController.h */,
 				4A11FDA1191694C800EF8634 /* SpriteViewController.m */,
+				4A11FDC51916957400EF8634 /* MenuScene.h */,
+				4A11FDC61916957400EF8634 /* MenuScene.m */,
+				4A11FDC81916996800EF8634 /* SpaceScene.h */,
+				4A11FDC91916996800EF8634 /* SpaceScene.m */,
+				4A11FDCB1916C3B600EF8634 /* Stars.sks */,
+				4A11FDCC1916C3B600EF8634 /* spark.png */,
 				4A11FDA3191694C800EF8634 /* SpriteMyScene.h */,
 				4A11FDA4191694C800EF8634 /* SpriteMyScene.m */,
 				4A11FDA6191694C800EF8634 /* Spaceship.png */,
@@ -247,8 +263,10 @@
 				4A11FDA7191694C800EF8634 /* Spaceship.png in Resources */,
 				4A11FDA9191694C800EF8634 /* Images.xcassets in Resources */,
 				4A11FD9F191694C800EF8634 /* Main_iPad.storyboard in Resources */,
+				4A11FDCE1916C3B600EF8634 /* spark.png in Resources */,
 				4A11FD9C191694C800EF8634 /* Main_iPhone.storyboard in Resources */,
 				4A11FD93191694C800EF8634 /* InfoPlist.strings in Resources */,
+				4A11FDCD1916C3B600EF8634 /* Stars.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -268,6 +286,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				4A11FD95191694C800EF8634 /* main.m in Sources */,
+				4A11FDCA1916996800EF8634 /* SpaceScene.m in Sources */,
+				4A11FDC71916957400EF8634 /* MenuScene.m in Sources */,
 				4A11FDA5191694C800EF8634 /* SpriteMyScene.m in Sources */,
 				4A11FD99191694C800EF8634 /* SpriteAppDelegate.m in Sources */,
 				4A11FDA2191694C800EF8634 /* SpriteViewController.m in Sources */,
@@ -408,6 +428,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SpaceShooter/SpaceShooter-Prefix.pch";
 				INFOPLIST_FILE = "SpaceShooter/SpaceShooter-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SPRITEKIT_TEXTURE_ATLAS_OUTPUT = YES;
 				WRAPPER_EXTENSION = app;
@@ -422,6 +443,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SpaceShooter/SpaceShooter-Prefix.pch";
 				INFOPLIST_FILE = "SpaceShooter/SpaceShooter-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SPRITEKIT_TEXTURE_ATLAS_OUTPUT = YES;
 				WRAPPER_EXTENSION = app;
