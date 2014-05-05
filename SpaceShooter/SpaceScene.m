@@ -32,6 +32,7 @@
 
     //physics body frame
     self.physicsBody = [SKPhysicsBody bodyWithEdgeLoopFromRect:self.frame];
+    self.physicsBody.restitution = 0;
     
     //background
     self.backgroundColor = [SKColor blackColor];
@@ -52,7 +53,8 @@
     spaceship.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:spaceship.size];
     spaceship.physicsBody.dynamic = YES;
     spaceship.physicsBody.affectedByGravity = NO;
-    spaceship.physicsBody.mass = .02;
+    spaceship.physicsBody.mass = .01;
+    spaceship.physicsBody.restitution = 0;
     return spaceship;
     
 }
@@ -86,7 +88,7 @@
     CMGyroData* data = self.motionManager.gyroData;
     if (fabs(data.rotationRate.x) > 0.2) {
         SKNode *spaceship = [self childNodeWithName:@"spaceship"];
-        [spaceship.physicsBody applyForce:CGVectorMake(40.0 * data.rotationRate.x, 0)];
+        [spaceship.physicsBody applyForce:CGVectorMake(30.0 * data.rotationRate.x, 0)];
     }
 }
 
