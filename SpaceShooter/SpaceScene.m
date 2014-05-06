@@ -20,17 +20,19 @@ typedef enum {
 }AmmunitionType;
 
 @interface SpaceScene()
+
 @property BOOL contentCreated;
 @property (nonatomic, strong)CMMotionManager *motionManager;
 @property (nonatomic, strong)SKSpriteNode *spaceship;
 @property (nonatomic, strong)NSMutableArray *asteroids;
 @property int nextAsteroidTime;
-@property (nonatomic, strong)NSMutableDictionary *ammunitionDic;
+@property NSMutableArray *ammunitionNodes;
 @property AmmunitionType selectedAmmunition;
 @property int lives;
 @property int level;
 @property int points;
 @property BOOL gameOver;
+
 @end
 
 
@@ -49,11 +51,8 @@ typedef enum {
 
 - (void)createSceneContents{
     
-    //bullets
-    self.ammunitionDic = [NSMutableDictionary dictionary];
-    NSArray *ammoArray = [self newAmmunitionPlural:BULLETS];
-    for (int i = 0; i < ammoArray.count; i++)[self addChild:ammoArray[i]];
-    [self.ammunitionDic setObject:ammoArray forKey:[NSNumber numberWithInt:BULLETS]];
+    //ammunition
+    self.ammunitionNodes = [NSMutableArray array];
     self.selectedAmmunition = BULLETS;
     
     //scene parameters
@@ -78,36 +77,30 @@ typedef enum {
     self.asteroids = [self newAsteroids];
     for (int i = 0; i < self.asteroids.count; i++)[self addChild:self.asteroids[i]];
     self.nextAsteroidTime = 0;
+    
+    //scoreboard
+    [self addChild:[self newScoreboard]];
 }
 
 - (SKSpriteNode *)newAmmunitionSingle:(AmmunitionType)type{
-    NSString *filename = nil;
-    switch (type) {
-        case BULLETS:
-            filename = @"bullets.png";
-            break;
-        case BULLETS_DOUBLE:
-            filename = @"bullets_double.png";
-            break;
-        case LASER:
-            filename = @"laser.png";
-            break;
-        case LASER_DOUBLE:
-            filename = @"laser_double.png";
-            break;
-    }
-    SKSpriteNode *ammunition = [SKSpriteNode spriteNodeWithColor:[SKColor yellowColor] size:CGSizeMake(8, 8)];
-    ammunition.hidden = YES;
+    SKColor *color = [SKColor yellowColor];
+    CGSize size = CGSizeMake(4, 4);
+//    switch (type) {
+//        case BULLETS:
+//            filename = @"bullets.png";
+//            break;
+//        case BULLETS_DOUBLE:
+//            filename = @"bullets_double.png";
+//            break;
+//        case LASER:
+//            filename = @"laser.png";
+//            break;
+//        case LASER_DOUBLE:
+//            filename = @"laser_double.png";
+//            break;
+//    }
+    SKSpriteNode *ammunition = [SKSpriteNode spriteNodeWithColor:color size:size];
     ammunition.name = @"bullet";
-    return ammunition;
-}
-
-- (NSMutableArray *)newAmmunitionPlural:(AmmunitionType)type{
-    int num = 15;
-    NSMutableArray *ammunition = [NSMutableArray arrayWithCapacity:num];
-    for (int i = 0; i < num; i++){
-        ammunition[i] = [self newAmmunitionSingle:type];
-    }
     return ammunition;
 }
 
@@ -151,6 +144,15 @@ typedef enum {
     return stars;
 }
 
+- (SKLabelNode *)newScoreboard{
+    SKLabelNode *scoreboard = [SKLabelNode labelNodeWithFontNamed:@"Futura-CondensedMedium"];
+    scoreboard.name = @"scoreboard";
+    scoreboard.position = CGPointMake(self.size.width * .05, self.size.height * .95);
+    scoreboard.fontSize = 16;
+    scoreboard.text = @"1 - 0";
+    return scoreboard;
+}
+
 #pragma mark - Start and End Game
 
 - (void) startTheGame{
@@ -170,7 +172,7 @@ typedef enum {
     
     NSString *message = [NSString stringWithFormat:@"level: %i\npoints: %i",self.level, self.points];
     SKLabelNode *label;
-    label = [[SKLabelNode alloc] initWithFontNamed:@"Futura-CondensedMedium"];
+    label = [SKLabelNode labelNodeWithFontNamed:@"Futura-CondensedMedium"];
     label.name = @"winLoseLabel";
     label.text = message;
     label.scale = 0.1;
@@ -179,7 +181,7 @@ typedef enum {
     [self addChild:label];
     
     SKLabelNode *restartLabel;
-    restartLabel = [[SKLabelNode alloc] initWithFontNamed:@"Futura-CondensedMedium"];
+    restartLabel = [SKLabelNode labelNodeWithFontNamed:@"Futura-CondensedMedium"];
     restartLabel.name = @"restartLabel";
     restartLabel.text = @"Play Again?";
     restartLabel.scale = 0.5;
@@ -191,7 +193,11 @@ typedef enum {
     
     [restartLabel runAction:labelScaleAction];
     [label runAction:labelScaleAction];
-    
+}
+
+- (void)updateScoreboard{
+    SKLabelNode *scoreboard = (SKLabelNode *)[self childNodeWithName:@"scoreboard"];
+    scoreboard.text = [NSString stringWithFormat:@"%i - %i",self.level, self.points];
 }
 
 #pragma mark - Gyro
@@ -257,39 +263,20 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
 
 #pragma mark - Shooting
 
-- (void)shoot:(SKSpriteNode *)ammo{
-    [ammo removeAllActions]; //not needed
-    ammo.position = self.spaceship.position;
-    ammo.hidden = NO;
+- (void)shoot:(AmmunitionType)type{
+    SKSpriteNode *ammo = [self newAmmunitionSingle:type];
+    [self.ammunitionNodes addObject:ammo];
+    ammo.position = CGPointMake(self.spaceship.position.x, self.spaceship.position.y + self.spaceship.size.height/2);
+//    ammo.position = self.spaceship.position;
     CGPoint positionAboveScreen = CGPointMake(ammo.position.x, self.size.height + ammo.size.height/2);
     SKAction *moveAction = [SKAction moveTo:positionAboveScreen duration:5];//duration in class?
     SKAction *doneAction = [SKAction runBlock:(dispatch_block_t)^() {
-        ammo.hidden = YES;
+        [self.ammunitionNodes removeObject:ammo];
+        [ammo removeFromParent];
     }];
+    [self addChild:ammo];
     [ammo runAction:[SKAction sequence:@[moveAction, doneAction]] withKey:@"shooting"];
 }
-
-- (void)startShooting:(AmmunitionType)type{
-    NSMutableArray *ammoArray = [self.ammunitionDic objectForKey:[NSNumber numberWithInt:type]];
-    if (!ammoArray){
-        ammoArray = [self newAmmunitionPlural:type];
-        [self.ammunitionDic setObject:ammoArray forKey:[NSNumber numberWithInt:type]];
-    }
-    [ammoArray enumerateObjectsUsingBlock:^(SKSpriteNode *ammo, NSUInteger idx, BOOL *stop) {
-        if (ammo.hidden == YES){
-            [self shoot:ammo];
-            *stop = YES;
-        }
-        else if (idx == self.asteroids.count - 1){
-            SKSpriteNode *newAmmo = [self newAmmunitionSingle:type];
-            [self addChild:newAmmo];
-            [ammoArray addObject:newAmmo];
-            [self shoot:newAmmo];
-            *stop = YES;
-        }
-    }];
-}
-
 
 #pragma mark - Run Loop
 
@@ -309,38 +296,27 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
                     asteroid.hidden = YES;
                     self.spaceship.color = [SKColor redColor];
                     
-                    //particle emmitter
+                    //particle emmitter/////////
                     SKAction *blink = [SKAction sequence:@[[SKAction fadeOutWithDuration:.2], [SKAction fadeInWithDuration:.2]]];
                     SKAction *blinkTimes = [SKAction repeatAction:blink count:4];
                     [self.spaceship runAction:blinkTimes];
                     
                 }
-    //            for (SKSpriteNode *bullet in )
+                SKSpriteNode *toRemove = nil;
+                for (SKSpriteNode *ammo in self.ammunitionNodes){
+                    if ([ammo intersectsNode:asteroid]){
+                        self.points += 5;
+                        [self updateScoreboard];
+                        asteroid.hidden = YES;
+                        toRemove = ammo;
+                        [ammo removeFromParent];
+                    }
+                }
+                [self.ammunitionNodes removeObject:toRemove];
             }
         }
     }
 }
-
-
-        
-//        if (asteroid.hidden) {
-//            continue;
-//        }
-//        for (SKSpriteNode *shipLaser in _shipLasers) {
-//            if (shipLaser.hidden) {
-//                continue;
-//            }
-//            
-//            if ([shipLaser intersectsNode:asteroid]) {
-//                shipLaser.hidden = YES;
-//                asteroid.hidden = YES;
-//                
-//                NSLog(@"you just destroyed an asteroid");
-//                continue;
-//            }
-//        }
-//    }
-//}
 
 #pragma mark - Actions
 
@@ -370,7 +346,7 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
     if (self.gameOver) return;
     
     //shoot
-    [self startShooting:self.selectedAmmunition];
+    [self shoot:self.selectedAmmunition];
 }
 
 
