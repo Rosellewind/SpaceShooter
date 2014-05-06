@@ -143,8 +143,7 @@
 				4A11FDC61916957400EF8634 /* MenuScene.m */,
 				4A11FDC81916996800EF8634 /* SpaceScene.h */,
 				4A11FDC91916996800EF8634 /* SpaceScene.m */,
-				4A11FDCB1916C3B600EF8634 /* Stars.sks */,
-				4A11FDCC1916C3B600EF8634 /* spark.png */,
+				4A11FE5A1918291D00EF8634 /* Particles */,
 				4A11FDA3191694C800EF8634 /* SpriteMyScene.h */,
 				4A11FDA4191694C800EF8634 /* SpriteMyScene.m */,
 				4A11FDA6191694C800EF8634 /* Spaceship.png */,
@@ -181,6 +180,15 @@
 				4A11FDB8191694C800EF8634 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4A11FE5A1918291D00EF8634 /* Particles */ = {
+			isa = PBXGroup;
+			children = (
+				4A11FDCB1916C3B600EF8634 /* Stars.sks */,
+				4A11FDCC1916C3B600EF8634 /* spark.png */,
+			);
+			name = Particles;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
