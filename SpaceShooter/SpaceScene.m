@@ -242,26 +242,6 @@ typedef enum {
     [label runAction:labelScaleAction];
 }
 
-//- (void)levelChanged{
-//    for (FlyingObject *asteroid in self.asteroids){
-//        asteroid.worth += 2;
-//        asteroid.maxStrength += 2;
-//        asteroid.strength += 2;
-//        asteroid.worth +=2;
-//        asteroid.speed +=2;
-//    }
-//}
-//
-//- (void)resetSpriteLevel{
-//    for (FlyingObject *asteroid in self.asteroids){
-//        asteroid.worth += 2;
-//        asteroid.maxStrength += 2;
-//        asteroid.strength += 2;
-//        asteroid.worth +=2;
-//        asteroid.speed +=2;
-//    }
-//}
-
 - (void)updateScoreboard{
     //simple level algorithm, level every 20 points
     while (self.level * 20 < self.points) {
@@ -336,7 +316,7 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
     if(!self.gameOver){
         [self startAsteroidIfNeeded:currentTime];
         [self updateSpaceshipPositionFromGyro];
-        
+
         //check for collisions
         for (FlyingObject *asteroid in self.asteroids) {
             if (!asteroid.hidden){
@@ -360,7 +340,7 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
                 for (SKSpriteNode *ammo in self.ammunitionNodes){
                     if (ammo.parent == NULL){
                         NSLog(@"null........");
-                        //remove from amunitionNodes///////////////
+                        toRemove = ammo;
                     }
                     if ([ammo intersectsNode:asteroid]){
                         self.points += 5;
