@@ -11,17 +11,18 @@
 //gyroscope
 //asteroids
 //bullets
+//scoreboard
 //collision detection
-
 //levels by points
 //level indicator
 //sounds level, powerup,
+
 //different ammo
 //switch different ammo
-//points display and level
 //enemies
 //power ups
 //indicate levelups
+
 
 @import CoreMotion;
 #import "SpaceScene.h"
@@ -41,7 +42,6 @@ typedef enum {
 @property int nextAsteroidTime;
 @property NSMutableArray *ammunitionNodes;
 @property AmmunitionType selectedAmmunition;
-//@property int lives;
 @property int level;
 @property int points;
 @property BOOL gameOver;
@@ -156,7 +156,7 @@ typedef enum {
 }
 
 - (FlyingObject *)newAsteroid{
-    FlyingObject *asteroid = [[FlyingObject alloc] initWithColor:[SKColor grayColor] size:CGSizeMake(32, 32) name:@"asteroid" strength:5 worth:2 direction:-1 speed:skRand(10, 20)];
+    FlyingObject *asteroid = [[FlyingObject alloc] initWithColor:[SKColor grayColor] size:CGSizeMake(32, 32) name:@"asteroid" strength:4 worth:2 direction:-1 speed:skRand(10, 20)];
     asteroid.hidden = YES;
     return asteroid;
 }
@@ -204,14 +204,28 @@ typedef enum {
     return stars;
 }
 
-- (SKLabelNode *)newScoreboard{
+- (SKNode *)newScoreboard{
     SKLabelNode *scoreboard = [SKLabelNode labelNodeWithFontNamed:@"Futura-CondensedMedium"];
     scoreboard.name = @"scoreboard";
-    scoreboard.position = CGPointMake(self.size.width * .05, self.size.height * .95);
-    scoreboard.fontSize = 16;
+    scoreboard.position = CGPointMake(28, 28);
+    scoreboard.fontSize = 24;
     scoreboard.text = @"1 - 0";
-    return scoreboard;
+    scoreboard.horizontalAlignmentMode = SKLabelHorizontalAlignmentModeCenter;
+    
+    SKLabelNode *strengthboard = [SKLabelNode labelNodeWithFontNamed:@"Futura-CondensedMedium"];
+    strengthboard.name = @"strengthboard";
+    strengthboard.position = CGPointMake(0, 0);
+    strengthboard.fontSize = 24;
+    strengthboard.text = [NSString stringWithFormat:@"strength: %i", self.spaceship.strength];
+    
+    SKNode *board = [[SKNode alloc]init];
+    board.name = @"board";
+    [board addChild:scoreboard];
+    [board addChild:strengthboard];
+    board.position = CGPointMake(self.size.width * .1, self.size.height * .95 - 48);
+    return board;
 }
+
 
 #pragma mark - Start and End Game
 
@@ -229,6 +243,7 @@ typedef enum {
 - (void)endGame{
     self.gameOver = YES;
     [self removeAllActions];
+    [self runAction:[SKAction playSoundFileNamed:@"game_over.wav" waitForCompletion:NO]];
     [self stopMonitoringGyro];
     self.spaceship.hidden = YES;
     
@@ -261,10 +276,18 @@ typedef enum {
     //simple level algorithm, level every 20 points
     while (self.level * 20 < self.points) {
         self.level++;
+        [self runAction:[SKAction playSoundFileNamed:@"level_up.mp3" waitForCompletion:NO]];
         [self displayLevelUp];
     }
-    SKLabelNode *scoreboard = (SKLabelNode *)[self childNodeWithName:@"scoreboard"];
+    SKNode *board = [self childNodeWithName:@"board"];
+    SKLabelNode *scoreboard = (SKLabelNode *)[board childNodeWithName:@"scoreboard"];
     scoreboard.text = [NSString stringWithFormat:@"%i - %i",self.level, self.points];
+}
+
+- (void)updateStrengthboard{
+    SKNode *board = [self childNodeWithName:@"board"];
+    SKLabelNode *strengthboard = (SKLabelNode *)[board childNodeWithName:@"strengthboard"];
+    strengthboard.text = [NSString stringWithFormat:@"strength: %i",self.spaceship.strength];
 }
 
 - (void)displayLevelUp{
@@ -342,6 +365,8 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
     [self.ammunitionNodes addObject:ammo];
     [self addChild:ammo];
     CGPoint position = CGPointMake(self.spaceship.position.x, self.spaceship.position.y + self.spaceship.size.height/2);
+    
+    [self runAction:[SKAction playSoundFileNamed:@"bullet.wav" waitForCompletion:NO]];
     [ammo flyAcrossScreenSize:self.size position:position forLevel:self.level remove:YES];
 }
 
@@ -355,10 +380,9 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
         for (FlyingObject *asteroid in self.asteroids) {
             if (!asteroid.hidden){
                 if ([self.spaceship intersectsNode:asteroid]){
-                    NSLog(@"asteroid.strength: %i", asteroid.strength);
-                    NSLog(@"self.spaceship.strength: %i", self.spaceship.strength);
-
+                    [self runAction:[SKAction playSoundFileNamed:@"small_explosion.wav" waitForCompletion:NO]];
                     self.spaceship.strength -= asteroid.strength;
+                    [self updateStrengthboard];
                     if (self.spaceship.strength <= 0) {
                         [self endGame]; break;
                     }
@@ -377,7 +401,7 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
                         toRemove = ammo;
                     }
                     if ([ammo intersectsNode:asteroid]){
-                        self.points += 5;
+                        self.points += asteroid.worth;
                         [self updateScoreboard];
                         asteroid.hidden = YES;
                         toRemove = ammo;
