@@ -6,7 +6,16 @@
 //  Copyright (c) 2014 Roselle Milvich. All rights reserved.
 //
 
-//levels by time or points
+//background
+//spaceship
+//gyroscope
+//asteroids
+//bullets
+//collision detection
+
+//levels by points
+//level indicator
+//sounds level, powerup,
 //different ammo
 //switch different ammo
 //points display and level
@@ -75,10 +84,6 @@ typedef enum {
     
     //scene parameters
     self.scaleMode = SKSceneScaleModeAspectFit;
-
-    //physics body frame
-    self.physicsBody = [SKPhysicsBody bodyWithEdgeLoopFromRect:self.frame];
-    self.physicsBody.restitution = 0;
     
     //background
     self.backgroundColor = [SKColor blackColor];
@@ -100,6 +105,15 @@ typedef enum {
     
     //scoreboard
     [self addChild:[self newScoreboard]];
+    
+    
+    //physics body frame
+//    CGRect physicsFrame = CGRectMake(0 - self.spaceship.size.width/2, 0 - self.spaceship.size.height/2, self.size.width + self.spaceship.size.width, self.size.height + self.spaceship.size.height);
+
+    float offset = self.size.width / 20;
+    CGRect physicsFrame = CGRectMake(0 - offset, 0, self.size.width + offset*2, self.size.height);
+    self.physicsBody = [SKPhysicsBody bodyWithEdgeLoopFromRect:physicsFrame];
+    self.physicsBody.restitution = 0;
 }
 
 - (FlyingObject *)newAmmunitionSingle:(AmmunitionType)type{
@@ -203,7 +217,8 @@ typedef enum {
 
 - (void) startTheGame{
     self.spaceship.strength = SPACESHIP_STRENGTH;
-    self.level = self.points = 0;
+    self.level = 1;
+    self.points = 0;
     [self updateScoreboard];
     self.spaceship.colorBlendFactor = 0;
     self.spaceship.hidden = NO;
@@ -246,10 +261,29 @@ typedef enum {
     //simple level algorithm, level every 20 points
     while (self.level * 20 < self.points) {
         self.level++;
-//        [self levelChanged];
+        [self displayLevelUp];
     }
     SKLabelNode *scoreboard = (SKLabelNode *)[self childNodeWithName:@"scoreboard"];
     scoreboard.text = [NSString stringWithFormat:@"%i - %i",self.level, self.points];
+}
+
+- (void)displayLevelUp{
+    SKLabelNode *levelLabel;
+    levelLabel = [SKLabelNode labelNodeWithFontNamed:@"Futura-CondensedMedium"];
+    levelLabel.name = @"levelLabel";
+    levelLabel.text = [NSString stringWithFormat:@"Level %i", self.level];
+    levelLabel.scale = 0.2;
+    levelLabel.position = CGPointMake(self.frame.size.width/2, self.frame.size.height/2);
+    levelLabel.fontColor = [SKColor blueColor];
+    levelLabel.fontSize = 80;
+    [self addChild:levelLabel];
+    
+    
+    SKAction *labelScaleAction = [SKAction scaleTo:1.0 duration:1];
+    SKAction *doneAction = [SKAction runBlock:^{
+        [levelLabel removeFromParent];
+    }];
+    [levelLabel runAction:[SKAction sequence:@[labelScaleAction, doneAction]]];
 }
 
 #pragma mark - Gyro
