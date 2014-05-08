@@ -58,21 +58,8 @@ typedef enum {
     if (!self.contentCreated){
         [self createSceneContents];
         [self moveSpaceshipToStartingPosition];
+        [self addGestureRecognizers];
         [self startTheGame];
-        
-        UISwipeGestureRecognizer *up = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(handleSwipe:)];
-        up.direction = UISwipeGestureRecognizerDirectionUp;
-        [[self view]addGestureRecognizer:up];
-        
-        UISwipeGestureRecognizer *down = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(handleSwipe:)];
-        down.direction = UISwipeGestureRecognizerDirectionUp;
-        [[self view]addGestureRecognizer:up];
-    }
-}
-
-- (void)handleSwipe:(UISwipeGestureRecognizer *)sender{
-    if (sender.state == UIGestureRecognizerStateEnded){
-        //view to select ammo //////////////
     }
 }
 
@@ -108,8 +95,6 @@ typedef enum {
     
     
     //physics body frame
-//    CGRect physicsFrame = CGRectMake(0 - self.spaceship.size.width/2, 0 - self.spaceship.size.height/2, self.size.width + self.spaceship.size.width, self.size.height + self.spaceship.size.height);
-
     float offset = self.size.width / 20;
     CGRect physicsFrame = CGRectMake(0 - offset, 0, self.size.width + offset*2, self.size.height);
     self.physicsBody = [SKPhysicsBody bodyWithEdgeLoopFromRect:physicsFrame];
@@ -226,6 +211,18 @@ typedef enum {
     return board;
 }
 
+- (void)addGestureRecognizers{
+    UISwipeGestureRecognizer *up = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(handleSwipe:)];
+    up.direction = UISwipeGestureRecognizerDirectionUp;
+    [self.view addGestureRecognizer:up];
+    
+    UISwipeGestureRecognizer *down = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(handleSwipe:)];
+    down.direction = UISwipeGestureRecognizerDirectionDown;
+    [self.view addGestureRecognizer:down];
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleTap:)];
+    [self.view addGestureRecognizer:tap];
+}
 
 #pragma mark - Start and End Game
 
@@ -397,7 +394,6 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
                 SKSpriteNode *toRemove = nil;
                 for (SKSpriteNode *ammo in self.ammunitionNodes){
                     if (ammo.parent == NULL){
-                        NSLog(@"null........");
                         toRemove = ammo;
                     }
                     if ([ammo intersectsNode:asteroid]){
@@ -433,26 +429,36 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
     [initialStars runAction:[SKAction sequence:@[wait, remove]]];
 }
 
-#pragma mark - Touches
+#pragma mark - Gesture Recognizers
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
-    
-    //check if restart
-    for (UITouch *touch in touches) {
-        SKNode *n = [self nodeAtPoint:[touch locationInNode:self]];
+
+- (void)handleTap:(UISwipeGestureRecognizer *)sender{
+    if (sender.state == UIGestureRecognizerStateEnded){
+        //check if restart
+        [sender locationInView:self.view];
+        SKNode *n = [self nodeAtPoint:[sender locationInView:self.view]];
         if (n != self && [n.name isEqual: @"restartLabel"]) {
             [[self childNodeWithName:@"restartLabel"] removeFromParent];
             [[self childNodeWithName:@"winLoseLabel"] removeFromParent];
             [self startTheGame];
             return;
         }
+        //do not process any more touches since it's game over
+        if (self.gameOver) return;
+        
+        //shoot
+        [self shoot:self.selectedAmmunition];
     }
     
-    //do not process anymore touches since it's game over
-    if (self.gameOver) return;
-    
-    //shoot
-    [self shoot:self.selectedAmmunition];
+}
+
+- (void)handleSwipe:(UISwipeGestureRecognizer *)sender{
+    if (sender.state == UIGestureRecognizerStateEnded){
+        //view to select ammo //////////////
+        NSLog(@"swipe----");
+        
+        
+    }
 }
 
 
