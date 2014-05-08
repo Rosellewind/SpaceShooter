@@ -16,9 +16,9 @@
 //levels by points
 //level indicator
 //sounds level, powerup,
-
 //different ammo
 //switch different ammo
+
 //enemies
 //power ups
 //indicate levelups
@@ -93,7 +93,6 @@ typedef enum {
     //scoreboard
     [self addChild:[self newScoreboard]];
     
-    
     //physics body frame
     float offset = self.size.width / 20;
     CGRect physicsFrame = CGRectMake(0 - offset, 0, self.size.width + offset*2, self.size.height);
@@ -112,8 +111,8 @@ typedef enum {
 //            filename = @"bullets.png";
             break;
         case BULLETS_DOUBLE:
-            color = [SKColor yellowColor];
-            size = CGSizeMake(4, 12);
+            color = [SKColor orangeColor];
+            size = CGSizeMake(4, 16);
             strength = 4;
             worth = 5;
             speed = 16;
@@ -128,11 +127,11 @@ typedef enum {
 //            filename = @"laser.png";
             break;
         case LASER_DOUBLE:
-            color = [SKColor redColor];
-            size = CGSizeMake(8, 12);
+            color = [SKColor greenColor];
+            size = CGSizeMake(8, 16);
             strength = 8;
             worth = 15;
-            speed = 30;
+            speed = 40;
 //            filename = @"laser_double.png";
             break;
     }
@@ -192,11 +191,10 @@ typedef enum {
 - (SKNode *)newScoreboard{
     SKLabelNode *scoreboard = [SKLabelNode labelNodeWithFontNamed:@"Futura-CondensedMedium"];
     scoreboard.name = @"scoreboard";
-    scoreboard.position = CGPointMake(28, 28);
+    scoreboard.position = CGPointMake(0, 28);
     scoreboard.fontSize = 24;
     scoreboard.text = @"1 - 0";
     scoreboard.horizontalAlignmentMode = SKLabelHorizontalAlignmentModeCenter;
-    
     SKLabelNode *strengthboard = [SKLabelNode labelNodeWithFontNamed:@"Futura-CondensedMedium"];
     strengthboard.name = @"strengthboard";
     strengthboard.position = CGPointMake(0, 0);
@@ -219,91 +217,6 @@ typedef enum {
     UISwipeGestureRecognizer *down = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(handleSwipe:)];
     down.direction = UISwipeGestureRecognizerDirectionDown;
     [self.view addGestureRecognizer:down];
-    
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleTap:)];
-    [self.view addGestureRecognizer:tap];
-}
-
-#pragma mark - Start and End Game
-
-- (void) startTheGame{
-    self.spaceship.strength = SPACESHIP_STRENGTH;
-    self.level = 1;
-    self.points = 0;
-    [self updateScoreboard];
-    self.spaceship.colorBlendFactor = 0;
-    self.spaceship.hidden = NO;
-    self.gameOver = NO;
-    [self startMonitoringGyro];
-}
-
-- (void)endGame{
-    self.gameOver = YES;
-    [self removeAllActions];
-    [self runAction:[SKAction playSoundFileNamed:@"game_over.wav" waitForCompletion:NO]];
-    [self stopMonitoringGyro];
-    self.spaceship.hidden = YES;
-    
-    NSString *message = [NSString stringWithFormat:@"level: %i\npoints: %i",self.level, self.points];
-    SKLabelNode *label;
-    label = [SKLabelNode labelNodeWithFontNamed:@"Futura-CondensedMedium"];
-    label.name = @"winLoseLabel";
-    label.text = message;
-    label.scale = 0.1;
-    label.position = CGPointMake(self.frame.size.width/2, self.frame.size.height * 0.6);
-    label.fontColor = [SKColor yellowColor];
-    [self addChild:label];
-    
-    SKLabelNode *restartLabel;
-    restartLabel = [SKLabelNode labelNodeWithFontNamed:@"Futura-CondensedMedium"];
-    restartLabel.name = @"restartLabel";
-    restartLabel.text = @"Play Again?";
-    restartLabel.scale = 0.5;
-    restartLabel.position = CGPointMake(self.frame.size.width/2, self.frame.size.height * 0.4);
-    restartLabel.fontColor = [SKColor yellowColor];
-    [self addChild:restartLabel];
-    
-    SKAction *labelScaleAction = [SKAction scaleTo:1.0 duration:0.5];
-    
-    [restartLabel runAction:labelScaleAction];
-    [label runAction:labelScaleAction];
-}
-
-- (void)updateScoreboard{
-    //simple level algorithm, level every 20 points
-    while (self.level * 20 < self.points) {
-        self.level++;
-        [self runAction:[SKAction playSoundFileNamed:@"level_up.mp3" waitForCompletion:NO]];
-        [self displayLevelUp];
-    }
-    SKNode *board = [self childNodeWithName:@"board"];
-    SKLabelNode *scoreboard = (SKLabelNode *)[board childNodeWithName:@"scoreboard"];
-    scoreboard.text = [NSString stringWithFormat:@"%i - %i",self.level, self.points];
-}
-
-- (void)updateStrengthboard{
-    SKNode *board = [self childNodeWithName:@"board"];
-    SKLabelNode *strengthboard = (SKLabelNode *)[board childNodeWithName:@"strengthboard"];
-    strengthboard.text = [NSString stringWithFormat:@"strength: %i",self.spaceship.strength];
-}
-
-- (void)displayLevelUp{
-    SKLabelNode *levelLabel;
-    levelLabel = [SKLabelNode labelNodeWithFontNamed:@"Futura-CondensedMedium"];
-    levelLabel.name = @"levelLabel";
-    levelLabel.text = [NSString stringWithFormat:@"Level %i", self.level];
-    levelLabel.scale = 0.2;
-    levelLabel.position = CGPointMake(self.frame.size.width/2, self.frame.size.height/2);
-    levelLabel.fontColor = [SKColor blueColor];
-    levelLabel.fontSize = 80;
-    [self addChild:levelLabel];
-    
-    
-    SKAction *labelScaleAction = [SKAction scaleTo:1.0 duration:1];
-    SKAction *doneAction = [SKAction runBlock:^{
-        [levelLabel removeFromParent];
-    }];
-    [levelLabel runAction:[SKAction sequence:@[labelScaleAction, doneAction]]];
 }
 
 #pragma mark - Gyro
@@ -363,11 +276,78 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
     [self addChild:ammo];
     CGPoint position = CGPointMake(self.spaceship.position.x, self.spaceship.position.y + self.spaceship.size.height/2);
     
-    [self runAction:[SKAction playSoundFileNamed:@"bullet.wav" waitForCompletion:NO]];
+    [self playSoundForAmmunition:self.selectedAmmunition];
     [ammo flyAcrossScreenSize:self.size position:position forLevel:self.level remove:YES];
 }
 
-#pragma mark - Run Loop
+- (void)showChosenAmmunition{
+    FlyingObject *chosenAmmo = [self newAmmunitionSingle:self.selectedAmmunition];
+    chosenAmmo.scale = 8;
+    chosenAmmo.position = CGPointMake(self.frame.size.width * .9, self.frame.size.height * .9);
+    chosenAmmo.alpha = .5;
+    [self addChild:chosenAmmo];
+    
+    SKAction *fadeIn = [SKAction fadeInWithDuration:3];
+    SKAction *fadeOut = [SKAction fadeOutWithDuration:3];
+    [chosenAmmo runAction:[SKAction sequence:@[fadeIn, fadeOut]] completion:^{
+        [chosenAmmo removeFromParent];
+    }];
+}
+
+- (void)playSoundForAmmunition:(AmmunitionType)type{
+    NSString *soundFile = @"bullet0.wav";
+    if (type == BULLETS_DOUBLE) soundFile = @"bullet1.mp3";
+    else if (type == LASER) soundFile = @"bullet2.wav";
+    else if (type == LASER_DOUBLE)soundFile = @"bullet3.wav";
+    [self runAction:[SKAction playSoundFileNamed:soundFile waitForCompletion:NO]];
+}
+
+#pragma mark - Start and End Game
+
+- (void) startTheGame{
+    self.spaceship.strength = SPACESHIP_STRENGTH;
+    self.level = 1;
+    self.points = 0;
+    [self updateScoreboard];
+    self.spaceship.colorBlendFactor = 0;
+    self.spaceship.hidden = NO;
+    self.gameOver = NO;
+    [self startMonitoringGyro];
+}
+
+- (void)endGame{
+    self.gameOver = YES;
+    [self removeAllActions];
+    [self runAction:[SKAction playSoundFileNamed:@"game_over.wav" waitForCompletion:NO]];
+    [self stopMonitoringGyro];
+    self.spaceship.hidden = YES;
+    
+    NSString *message = [NSString stringWithFormat:@"level: %i\npoints: %i",self.level, self.points];
+    SKLabelNode *label;
+    label = [SKLabelNode labelNodeWithFontNamed:@"Futura-CondensedMedium"];
+    label.name = @"winLoseLabel";
+    label.text = message;
+    label.scale = 0.1;
+    label.position = CGPointMake(self.frame.size.width/2, self.frame.size.height * 0.6);
+    label.fontColor = [SKColor yellowColor];
+    [self addChild:label];
+    
+    SKLabelNode *restartLabel;
+    restartLabel = [SKLabelNode labelNodeWithFontNamed:@"Futura-CondensedMedium"];
+    restartLabel.name = @"restartLabel";
+    restartLabel.text = @"Play Again?";
+    restartLabel.scale = 0.5;
+    restartLabel.position = CGPointMake(self.frame.size.width/2, self.frame.size.height * 0.4);
+    restartLabel.fontColor = [SKColor yellowColor];
+    [self addChild:restartLabel];
+    
+    SKAction *labelScaleAction = [SKAction scaleTo:1.0 duration:0.5];
+    
+    [restartLabel runAction:labelScaleAction];
+    [label runAction:labelScaleAction];
+}
+
+#pragma mark - Run Loop and Updates
 - (void)update:(NSTimeInterval)currentTime{
     if(!self.gameOver){
         [self startAsteroidIfNeeded:currentTime];
@@ -410,6 +390,43 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
     }
 }
 
+- (void)updateScoreboard{
+    //simple level algorithm, level every 20 points
+    while (self.level * 20 < self.points) {
+        self.level++;
+        [self runAction:[SKAction playSoundFileNamed:@"level_up.mp3" waitForCompletion:NO]];
+        [self displayLevelUp];
+    }
+    SKNode *board = [self childNodeWithName:@"board"];
+    SKLabelNode *scoreboard = (SKLabelNode *)[board childNodeWithName:@"scoreboard"];
+    scoreboard.text = [NSString stringWithFormat:@"%i - %i",self.level, self.points];
+}
+
+- (void)updateStrengthboard{
+    SKNode *board = [self childNodeWithName:@"board"];
+    SKLabelNode *strengthboard = (SKLabelNode *)[board childNodeWithName:@"strengthboard"];
+    strengthboard.text = [NSString stringWithFormat:@"strength: %i",self.spaceship.strength];
+}
+
+- (void)displayLevelUp{
+    SKLabelNode *levelLabel;
+    levelLabel = [SKLabelNode labelNodeWithFontNamed:@"Futura-CondensedMedium"];
+    levelLabel.name = @"levelLabel";
+    levelLabel.text = [NSString stringWithFormat:@"Level %i", self.level];
+    levelLabel.scale = 0.2;
+    levelLabel.position = CGPointMake(self.frame.size.width/2, self.frame.size.height/2);
+    levelLabel.fontColor = [SKColor blueColor];
+    levelLabel.fontSize = 80;
+    [self addChild:levelLabel];
+    
+    
+    SKAction *labelScaleAction = [SKAction scaleTo:1.0 duration:1];
+    SKAction *doneAction = [SKAction runBlock:^{
+        [levelLabel removeFromParent];
+    }];
+    [levelLabel runAction:[SKAction sequence:@[labelScaleAction, doneAction]]];
+}
+
 #pragma mark - Actions
 
 - (void)moveSpaceshipToStartingPosition{
@@ -429,38 +446,43 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
     [initialStars runAction:[SKAction sequence:@[wait, remove]]];
 }
 
-#pragma mark - Gesture Recognizers
+#pragma mark - Touches and Swipes
 
-
-- (void)handleTap:(UISwipeGestureRecognizer *)sender{
-    if (sender.state == UIGestureRecognizerStateEnded){
-        //check if restart
-        [sender locationInView:self.view];
-        SKNode *n = [self nodeAtPoint:[sender locationInView:self.view]];
-        if (n != self && [n.name isEqual: @"restartLabel"]) {
-            [[self childNodeWithName:@"restartLabel"] removeFromParent];
-            [[self childNodeWithName:@"winLoseLabel"] removeFromParent];
-            [self startTheGame];
-            return;
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+    //check if restart
+    if (self.gameOver){
+        for (UITouch *touch in touches) {
+            SKNode *n = [self nodeAtPoint:[touch locationInNode:self]];
+            if (n != self && [n.name isEqual: @"restartLabel"]) {
+                [[self childNodeWithName:@"restartLabel"] removeFromParent];
+                [[self childNodeWithName:@"winLoseLabel"] removeFromParent];
+                [self startTheGame];
+                return;
+            }
         }
-        //do not process any more touches since it's game over
-        if (self.gameOver) return;
-        
-        //shoot
-        [self shoot:self.selectedAmmunition];
     }
+    //do not process any more touches since it's game over
+    if (self.gameOver) return;
     
+    //shoot
+    [self shoot:self.selectedAmmunition];
 }
 
 - (void)handleSwipe:(UISwipeGestureRecognizer *)sender{
-    if (sender.state == UIGestureRecognizerStateEnded){
+    if (sender.state == UIGestureRecognizerStateEnded && !self.gameOver){
         //view to select ammo //////////////
         NSLog(@"swipe----");
-        
-        
+        if (sender.direction == UISwipeGestureRecognizerDirectionDown){
+            if (self.selectedAmmunition == 3) self.selectedAmmunition = 0;
+            else self.selectedAmmunition ++;
+        }
+        else {
+            if (self.selectedAmmunition == 0) self.selectedAmmunition = 3;
+            else self.selectedAmmunition --;
+        }
+        NSLog(@"ammo: %i", self.selectedAmmunition);
+        [self showChosenAmmunition];
     }
 }
-
-
 
 @end
