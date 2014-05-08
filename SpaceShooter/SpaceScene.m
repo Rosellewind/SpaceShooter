@@ -6,15 +6,19 @@
 //  Copyright (c) 2014 Roselle Milvich. All rights reserved.
 //
 
-//levels by time
+//levels by time or points
 //different ammo
 //switch different ammo
 //points display and level
 //enemies
+//power ups
+//indicate levelups
 
 @import CoreMotion;
 #import "SpaceScene.h"
+#import "FlyingObject.h"
 
+#define SPACESHIP_STRENGTH 10
 typedef enum {
     BULLETS, BULLETS_DOUBLE, LASER, LASER_DOUBLE
 }AmmunitionType;
@@ -23,12 +27,12 @@ typedef enum {
 
 @property BOOL contentCreated;
 @property (nonatomic, strong)CMMotionManager *motionManager;
-@property (nonatomic, strong)SKSpriteNode *spaceship;
+@property (nonatomic, strong)FlyingObject *spaceship;
 @property (nonatomic, strong)NSMutableArray *asteroids;
 @property int nextAsteroidTime;
 @property NSMutableArray *ammunitionNodes;
 @property AmmunitionType selectedAmmunition;
-@property int lives;
+//@property int lives;
 @property int level;
 @property int points;
 @property BOOL gameOver;
@@ -46,6 +50,20 @@ typedef enum {
         [self createSceneContents];
         [self moveSpaceshipToStartingPosition];
         [self startTheGame];
+        
+        UISwipeGestureRecognizer *up = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(handleSwipe:)];
+        up.direction = UISwipeGestureRecognizerDirectionUp;
+        [[self view]addGestureRecognizer:up];
+        
+        UISwipeGestureRecognizer *down = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(handleSwipe:)];
+        down.direction = UISwipeGestureRecognizerDirectionUp;
+        [[self view]addGestureRecognizer:up];
+    }
+}
+
+- (void)handleSwipe:(UISwipeGestureRecognizer *)sender{
+    if (sender.state == UIGestureRecognizerStateEnded){
+        //view to select ammo //////////////
     }
 }
 
@@ -66,8 +84,10 @@ typedef enum {
     self.backgroundColor = [SKColor blackColor];
     
     //stars
-    [self addChild:[self newStars]];
-    
+    [self addChild:[self newStars:NO]];
+    [self addChild:[self newStars:YES]];
+    [self timedRemoveInitialStars];
+
     //spaceship
     self.spaceship = [self newSpaceship];
     [self addChild:self.spaceship];
@@ -82,32 +102,48 @@ typedef enum {
     [self addChild:[self newScoreboard]];
 }
 
-- (SKSpriteNode *)newAmmunitionSingle:(AmmunitionType)type{
+- (FlyingObject *)newAmmunitionSingle:(AmmunitionType)type{
     SKColor *color = [SKColor yellowColor];
     CGSize size = CGSizeMake(4, 4);
-//    switch (type) {
-//        case BULLETS:
+    int strength = 2;
+    int worth = 2;
+    float speed = 12;
+    switch (type) {
+        case BULLETS:
 //            filename = @"bullets.png";
-//            break;
-//        case BULLETS_DOUBLE:
+            break;
+        case BULLETS_DOUBLE:
+            color = [SKColor yellowColor];
+            size = CGSizeMake(4, 12);
+            strength = 4;
+            worth = 5;
+            speed = 16;
 //            filename = @"bullets_double.png";
-//            break;
-//        case LASER:
+            break;
+        case LASER:
+            color = [SKColor redColor];
+            size = CGSizeMake(6, 6);
+            strength = 6;
+            worth = 10;
+            speed = 25;
 //            filename = @"laser.png";
-//            break;
-//        case LASER_DOUBLE:
+            break;
+        case LASER_DOUBLE:
+            color = [SKColor redColor];
+            size = CGSizeMake(8, 12);
+            strength = 8;
+            worth = 15;
+            speed = 30;
 //            filename = @"laser_double.png";
-//            break;
-//    }
-    SKSpriteNode *ammunition = [SKSpriteNode spriteNodeWithColor:color size:size];
-    ammunition.name = @"bullet";
+            break;
+    }
+    FlyingObject *ammunition = [[FlyingObject alloc]initWithColor:color size:size name:@"bullet" strength:strength worth:worth direction:1 speed:speed];
     return ammunition;
 }
 
-- (SKSpriteNode *)newAsteroid{
-    SKSpriteNode *asteroid = [SKSpriteNode spriteNodeWithColor:[SKColor grayColor] size:CGSizeMake(32, 32)];
+- (FlyingObject *)newAsteroid{
+    FlyingObject *asteroid = [[FlyingObject alloc] initWithColor:[SKColor grayColor] size:CGSizeMake(32, 32) name:@"asteroid" strength:5 worth:2 direction:-1 speed:skRand(10, 20)];
     asteroid.hidden = YES;
-    asteroid.name = @"asteroid";
     return asteroid;
 }
 
@@ -120,27 +156,37 @@ typedef enum {
     return asteroids;
 }
 
-- (SKSpriteNode *)newSpaceship{
-    SKSpriteNode *spaceship = [SKSpriteNode spriteNodeWithImageNamed:@"Spaceship.png"];
-    spaceship.name = @"spaceship";
+- (FlyingObject *)newSpaceship{
+    FlyingObject *spaceship = [[FlyingObject alloc]initWithImageNamed:@"Spaceship.png" name:@"spaceship" strength:SPACESHIP_STRENGTH worth:0 direction:0 speed:3];
     spaceship.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame));
     spaceship.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:spaceship.size];
     spaceship.physicsBody.dynamic = YES;
     spaceship.physicsBody.affectedByGravity = NO;
     spaceship.physicsBody.mass = .01;
     spaceship.physicsBody.restitution = 0;
-    spaceship.color = [SKColor redColor];////
+    spaceship.color = [SKColor redColor];
     return spaceship;
-    
 }
 
-- (SKEmitterNode * )newStars{
+- (SKEmitterNode * )newStars:(BOOL)initial{     //gravity formula, t = sqrt((2 * d)/g)
     NSString *starsPath = [[NSBundle mainBundle] pathForResource:@"Stars" ofType:@".sks"];
     SKEmitterNode *stars = [NSKeyedUnarchiver unarchiveObjectWithFile:starsPath];
-    stars.name = @"stars";
     stars.targetNode = self;
-    stars.particlePosition = CGPointMake(self.size.width/2.0, self.size.height);
-    stars.particlePositionRange = CGVectorMake(self.size.width, 0);
+    int lifetime = ceil(sqrt((2 * self.size.height)/(stars.yAcceleration * -1)));//estimated initial velocity = 0 rather than v=10, insignificant .5 sec overestimate on ipad
+    int numOnScreen = lifetime * stars.particleBirthRate;
+    stars.particleLifetime = lifetime;
+    if (initial){
+        stars.name = @"initialStars";
+        stars.particleBirthRate = numOnScreen * 100;
+        stars.numParticlesToEmit = numOnScreen;
+        stars.particlePosition = CGPointMake(self.size.width/2.0, self.size.height/2);
+        stars.particlePositionRange = CGVectorMake(self.size.width, self.size.height);
+    }
+    else {
+        stars.name = @"stars";
+        stars.particlePosition = CGPointMake(self.size.width/2.0, self.size.height);
+        stars.particlePositionRange = CGVectorMake(self.size.width, 0);
+    }
     return stars;
 }
 
@@ -156,8 +202,9 @@ typedef enum {
 #pragma mark - Start and End Game
 
 - (void) startTheGame{
-    self.lives = 3;
+    self.spaceship.strength = SPACESHIP_STRENGTH;
     self.level = self.points = 0;
+    [self updateScoreboard];
     self.spaceship.colorBlendFactor = 0;
     self.spaceship.hidden = NO;
     self.gameOver = NO;
@@ -195,7 +242,32 @@ typedef enum {
     [label runAction:labelScaleAction];
 }
 
+//- (void)levelChanged{
+//    for (FlyingObject *asteroid in self.asteroids){
+//        asteroid.worth += 2;
+//        asteroid.maxStrength += 2;
+//        asteroid.strength += 2;
+//        asteroid.worth +=2;
+//        asteroid.speed +=2;
+//    }
+//}
+//
+//- (void)resetSpriteLevel{
+//    for (FlyingObject *asteroid in self.asteroids){
+//        asteroid.worth += 2;
+//        asteroid.maxStrength += 2;
+//        asteroid.strength += 2;
+//        asteroid.worth +=2;
+//        asteroid.speed +=2;
+//    }
+//}
+
 - (void)updateScoreboard{
+    //simple level algorithm, level every 20 points
+    while (self.level * 20 < self.points) {
+        self.level++;
+//        [self levelChanged];
+    }
     SKLabelNode *scoreboard = (SKLabelNode *)[self childNodeWithName:@"scoreboard"];
     scoreboard.text = [NSString stringWithFormat:@"%i - %i",self.level, self.points];
 }
@@ -231,29 +303,17 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
     return rand()/(CGFloat)RAND_MAX * (high - low) + low;
 }
 
-- (void)startAsteroid:(SKSpriteNode *)asteroid{
-    [asteroid removeAllActions]; //not needed
-    asteroid.position = CGPointMake(skRand(0, self.size.width), self.size.height + asteroid.size.height/2);
-    asteroid.hidden = NO;
-    CGPoint positionBelowScreen = CGPointMake(asteroid.position.x, 0 - asteroid.size.height/2);
-    SKAction *moveAction = [SKAction moveTo:positionBelowScreen duration:skRand(2, 10)];
-    SKAction *doneAction = [SKAction runBlock:(dispatch_block_t)^() {
-        asteroid.hidden = YES;
-    }];
-    [asteroid runAction:[SKAction sequence:@[moveAction, doneAction]] withKey:@"asteroidMoving"];
-}
-
 - (void)startAsteroidIfNeeded:(NSTimeInterval)currentTime{
     if (self.nextAsteroidTime < currentTime){
-        [self.asteroids enumerateObjectsUsingBlock:^(SKSpriteNode *asteroid, NSUInteger idx, BOOL *stop) {
+        [self.asteroids enumerateObjectsUsingBlock:^(FlyingObject *asteroid, NSUInteger idx, BOOL *stop) {
             if (asteroid.hidden == YES){
-                [self startAsteroid:asteroid];
+                [asteroid flyAcrossScreenSize:self.size position:CGPointMake(-1, -1) forLevel:self.level remove:NO];
                 *stop = YES;
             }
             else if (idx == self.asteroids.count - 1){
-                SKSpriteNode *newAsteroid = [self newAsteroid];
+                FlyingObject *newAsteroid = [self newAsteroid];
                 [self.asteroids addObject:newAsteroid];
-                [self startAsteroid:newAsteroid];
+                [asteroid flyAcrossScreenSize:self.size position:CGPointMake(-1, -1) forLevel:self.level remove:NO];
                 *stop = YES;
             }
         }];
@@ -264,37 +324,31 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
 #pragma mark - Shooting
 
 - (void)shoot:(AmmunitionType)type{
-    SKSpriteNode *ammo = [self newAmmunitionSingle:type];
+    FlyingObject *ammo = [self newAmmunitionSingle:type];
     [self.ammunitionNodes addObject:ammo];
-    ammo.position = CGPointMake(self.spaceship.position.x, self.spaceship.position.y + self.spaceship.size.height/2);
-//    ammo.position = self.spaceship.position;
-    CGPoint positionAboveScreen = CGPointMake(ammo.position.x, self.size.height + ammo.size.height/2);
-    SKAction *moveAction = [SKAction moveTo:positionAboveScreen duration:5];//duration in class?
-    SKAction *doneAction = [SKAction runBlock:(dispatch_block_t)^() {
-        [self.ammunitionNodes removeObject:ammo];
-        [ammo removeFromParent];
-    }];
     [self addChild:ammo];
-    [ammo runAction:[SKAction sequence:@[moveAction, doneAction]] withKey:@"shooting"];
+    CGPoint position = CGPointMake(self.spaceship.position.x, self.spaceship.position.y + self.spaceship.size.height/2);
+    [ammo flyAcrossScreenSize:self.size position:position forLevel:self.level remove:YES];
 }
 
 #pragma mark - Run Loop
-
 - (void)update:(NSTimeInterval)currentTime{
     if(!self.gameOver){
         [self startAsteroidIfNeeded:currentTime];
         [self updateSpaceshipPositionFromGyro];
         
         //check for collisions
-        for (SKSpriteNode *asteroid in self.asteroids) {
+        for (FlyingObject *asteroid in self.asteroids) {
             if (!asteroid.hidden){
                 if ([self.spaceship intersectsNode:asteroid]){
-                    if (self.lives == 3) self.spaceship.colorBlendFactor = .3;
-                    else if (self.lives == 2) self.spaceship.colorBlendFactor = .6;
-                    else if (self.lives == 1) {[self endGame]; break;}
-                    self.lives--;
+                    NSLog(@"asteroid.strength: %i", asteroid.strength);
+                    NSLog(@"self.spaceship.strength: %i", self.spaceship.strength);
+
+                    self.spaceship.strength -= asteroid.strength;
+                    if (self.spaceship.strength <= 0) {
+                        [self endGame]; break;
+                    }
                     asteroid.hidden = YES;
-                    self.spaceship.color = [SKColor redColor];
                     
                     //particle emmitter/////////
                     SKAction *blink = [SKAction sequence:@[[SKAction fadeOutWithDuration:.2], [SKAction fadeInWithDuration:.2]]];
@@ -304,6 +358,10 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
                 }
                 SKSpriteNode *toRemove = nil;
                 for (SKSpriteNode *ammo in self.ammunitionNodes){
+                    if (ammo.parent == NULL){
+                        NSLog(@"null........");
+                        //remove from amunitionNodes///////////////
+                    }
                     if ([ammo intersectsNode:asteroid]){
                         self.points += 5;
                         [self updateScoreboard];
@@ -325,6 +383,16 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
     SKAction *move = [SKAction moveTo:CGPointMake(CGRectGetMidX(self.frame), 50) duration:1];
     SKAction *scale = [SKAction scaleTo:scaleTo duration:1];
     [self.spaceship runAction:[SKAction group:@[move, scale]]];
+}
+
+- (void)timedRemoveInitialStars{
+    SKEmitterNode *initialStars = (SKEmitterNode*)[self childNodeWithName:@"initialStars"];
+    int lifetime = ceil(sqrt((2 * self.size.height)/(initialStars.yAcceleration * -1)));
+    SKAction *wait = [SKAction waitForDuration:lifetime];
+    SKAction *remove = [SKAction runBlock:^{
+        [initialStars removeFromParent];
+    }];
+    [initialStars runAction:[SKAction sequence:@[wait, remove]]];
 }
 
 #pragma mark - Touches
