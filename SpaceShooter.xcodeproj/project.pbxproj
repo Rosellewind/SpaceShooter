@@ -17,7 +17,6 @@
 		4A11FD9C191694C800EF8634 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4A11FD9A191694C800EF8634 /* Main_iPhone.storyboard */; };
 		4A11FD9F191694C800EF8634 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4A11FD9D191694C800EF8634 /* Main_iPad.storyboard */; };
 		4A11FDA2191694C800EF8634 /* SpriteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A11FDA1191694C800EF8634 /* SpriteViewController.m */; };
-		4A11FDA5191694C800EF8634 /* SpriteMyScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A11FDA4191694C800EF8634 /* SpriteMyScene.m */; };
 		4A11FDA7191694C800EF8634 /* Spaceship.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A11FDA6191694C800EF8634 /* Spaceship.png */; };
 		4A11FDA9191694C800EF8634 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4A11FDA8191694C800EF8634 /* Images.xcassets */; };
 		4A11FDB0191694C800EF8634 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A11FDAF191694C800EF8634 /* XCTest.framework */; };
@@ -36,12 +35,14 @@
 		4A127BE1191C133600C31B4D /* bullet3.wav in Resources */ = {isa = PBXBuildFile; fileRef = 4A127BE0191C133600C31B4D /* bullet3.wav */; };
 		4A127BE3191C133F00C31B4D /* bullet2.wav in Resources */ = {isa = PBXBuildFile; fileRef = 4A127BE2191C133F00C31B4D /* bullet2.wav */; };
 		4A127BE5191C134600C31B4D /* bullet1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4A127BE4191C134600C31B4D /* bullet1.mp3 */; };
-		4A127BE7191C3C8200C31B4D /* MyParticle.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4A127BE6191C3C8200C31B4D /* MyParticle.sks */; };
+		4A127BE7191C3C8200C31B4D /* fire.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4A127BE6191C3C8200C31B4D /* fire.sks */; };
 		4A127BE9191C3CE200C31B4D /* spark.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4A127BE8191C3CE200C31B4D /* spark.sks */; };
 		4A127BF1191C4EA200C31B4D /* powerup.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A127BF0191C4EA200C31B4D /* powerup.png */; };
 		4A127BF3191C500100C31B4D /* powerup.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 4A127BF2191C500100C31B4D /* powerup.aiff */; };
 		4A127BF6191C5E6100C31B4D /* fire_ball.wav in Resources */ = {isa = PBXBuildFile; fileRef = 4A127BF5191C5E6100C31B4D /* fire_ball.wav */; };
-		4A127BF8191C62C700C31B4D /* asteroid.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A127BF7191C62C700C31B4D /* asteroid.png */; };
+		4A127BFA191C640E00C31B4D /* asteroid.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A127BF9191C640E00C31B4D /* asteroid.png */; };
+		4A127BFD191C841C00C31B4D /* smoke.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4A127BFC191C841C00C31B4D /* smoke.sks */; };
+		4A127BFF191C843300C31B4D /* magic.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4A127BFE191C843300C31B4D /* magic.sks */; };
 		4AEDDCCF19197DB600690D75 /* FlyingObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AEDDCCE19197DB600690D75 /* FlyingObject.m */; };
 /* End PBXBuildFile section */
 
@@ -71,8 +72,6 @@
 		4A11FD9E191694C800EF8634 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
 		4A11FDA0191694C800EF8634 /* SpriteViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SpriteViewController.h; sourceTree = "<group>"; };
 		4A11FDA1191694C800EF8634 /* SpriteViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SpriteViewController.m; sourceTree = "<group>"; };
-		4A11FDA3191694C800EF8634 /* SpriteMyScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SpriteMyScene.h; sourceTree = "<group>"; };
-		4A11FDA4191694C800EF8634 /* SpriteMyScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SpriteMyScene.m; sourceTree = "<group>"; };
 		4A11FDA6191694C800EF8634 /* Spaceship.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Spaceship.png; sourceTree = "<group>"; };
 		4A11FDA8191694C800EF8634 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		4A11FDAE191694C800EF8634 /* SpaceShooterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SpaceShooterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -93,12 +92,14 @@
 		4A127BE0191C133600C31B4D /* bullet3.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = bullet3.wav; sourceTree = "<group>"; };
 		4A127BE2191C133F00C31B4D /* bullet2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = bullet2.wav; sourceTree = "<group>"; };
 		4A127BE4191C134600C31B4D /* bullet1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = bullet1.mp3; sourceTree = "<group>"; };
-		4A127BE6191C3C8200C31B4D /* MyParticle.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MyParticle.sks; sourceTree = "<group>"; };
+		4A127BE6191C3C8200C31B4D /* fire.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = fire.sks; sourceTree = "<group>"; };
 		4A127BE8191C3CE200C31B4D /* spark.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = spark.sks; sourceTree = "<group>"; };
 		4A127BF0191C4EA200C31B4D /* powerup.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = powerup.png; sourceTree = "<group>"; };
 		4A127BF2191C500100C31B4D /* powerup.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = powerup.aiff; sourceTree = "<group>"; };
 		4A127BF5191C5E6100C31B4D /* fire_ball.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = fire_ball.wav; sourceTree = "<group>"; };
-		4A127BF7191C62C700C31B4D /* asteroid.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = asteroid.png; sourceTree = "<group>"; };
+		4A127BF9191C640E00C31B4D /* asteroid.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = asteroid.png; sourceTree = "<group>"; };
+		4A127BFC191C841C00C31B4D /* smoke.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = smoke.sks; sourceTree = "<group>"; };
+		4A127BFE191C843300C31B4D /* magic.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = magic.sks; sourceTree = "<group>"; };
 		4AEDDCCD19197DB600690D75 /* FlyingObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlyingObject.h; sourceTree = "<group>"; };
 		4AEDDCCE19197DB600690D75 /* FlyingObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlyingObject.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -176,11 +177,7 @@
 				4AEDDCCE19197DB600690D75 /* FlyingObject.m */,
 				4A127BD6191BFA8F00C31B4D /* Sounds */,
 				4A11FE5A1918291D00EF8634 /* Particles */,
-				4A11FDA3191694C800EF8634 /* SpriteMyScene.h */,
-				4A11FDA4191694C800EF8634 /* SpriteMyScene.m */,
-				4A11FDA6191694C800EF8634 /* Spaceship.png */,
-				4A127BF0191C4EA200C31B4D /* powerup.png */,
-				4A127BF7191C62C700C31B4D /* asteroid.png */,
+				4A127BFB191C83FA00C31B4D /* Images */,
 				4A11FDA8191694C800EF8634 /* Images.xcassets */,
 				4A11FD8F191694C800EF8634 /* Supporting Files */,
 			);
@@ -221,8 +218,10 @@
 			children = (
 				4A11FDCB1916C3B600EF8634 /* Stars.sks */,
 				4A11FDCC1916C3B600EF8634 /* spark.png */,
-				4A127BE6191C3C8200C31B4D /* MyParticle.sks */,
+				4A127BE6191C3C8200C31B4D /* fire.sks */,
 				4A127BE8191C3CE200C31B4D /* spark.sks */,
+				4A127BFC191C841C00C31B4D /* smoke.sks */,
+				4A127BFE191C843300C31B4D /* magic.sks */,
 			);
 			name = Particles;
 			sourceTree = "<group>";
@@ -241,6 +240,16 @@
 				4A127BF5191C5E6100C31B4D /* fire_ball.wav */,
 			);
 			name = Sounds;
+			sourceTree = "<group>";
+		};
+		4A127BFB191C83FA00C31B4D /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				4A11FDA6191694C800EF8634 /* Spaceship.png */,
+				4A127BF0191C4EA200C31B4D /* powerup.png */,
+				4A127BF9191C640E00C31B4D /* asteroid.png */,
+			);
+			name = Images;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -321,21 +330,23 @@
 			buildActionMask = 2147483647;
 			files = (
 				4A11FDA7191694C800EF8634 /* Spaceship.png in Resources */,
-				4A127BF8191C62C700C31B4D /* asteroid.png in Resources */,
 				4A127BDC191BFE8300C31B4D /* game_over.wav in Resources */,
 				4A11FDA9191694C800EF8634 /* Images.xcassets in Resources */,
+				4A127BFA191C640E00C31B4D /* asteroid.png in Resources */,
 				4A11FD9F191694C800EF8634 /* Main_iPad.storyboard in Resources */,
 				4A127BF3191C500100C31B4D /* powerup.aiff in Resources */,
-				4A127BE7191C3C8200C31B4D /* MyParticle.sks in Resources */,
+				4A127BE7191C3C8200C31B4D /* fire.sks in Resources */,
 				4A11FDCE1916C3B600EF8634 /* spark.png in Resources */,
 				4A11FD9C191694C800EF8634 /* Main_iPhone.storyboard in Resources */,
 				4A11FD93191694C800EF8634 /* InfoPlist.strings in Resources */,
 				4A127BDA191BFCBF00C31B4D /* small_explosion.wav in Resources */,
 				4A127BE9191C3CE200C31B4D /* spark.sks in Resources */,
 				4A127BE1191C133600C31B4D /* bullet3.wav in Resources */,
+				4A127BFD191C841C00C31B4D /* smoke.sks in Resources */,
 				4A127BDF191C009600C31B4D /* level_up.mp3 in Resources */,
 				4A11FDCD1916C3B600EF8634 /* Stars.sks in Resources */,
 				4A127BE3191C133F00C31B4D /* bullet2.wav in Resources */,
+				4A127BFF191C843300C31B4D /* magic.sks in Resources */,
 				4A127BE5191C134600C31B4D /* bullet1.mp3 in Resources */,
 				4A127BF1191C4EA200C31B4D /* powerup.png in Resources */,
 				4A127BF6191C5E6100C31B4D /* fire_ball.wav in Resources */,
@@ -361,7 +372,6 @@
 				4A11FD95191694C800EF8634 /* main.m in Sources */,
 				4A11FDCA1916996800EF8634 /* SpaceScene.m in Sources */,
 				4A11FDC71916957400EF8634 /* MenuScene.m in Sources */,
-				4A11FDA5191694C800EF8634 /* SpriteMyScene.m in Sources */,
 				4A11FD99191694C800EF8634 /* SpriteAppDelegate.m in Sources */,
 				4AEDDCCF19197DB600690D75 /* FlyingObject.m in Sources */,
 				4A11FDA2191694C800EF8634 /* SpriteViewController.m in Sources */,

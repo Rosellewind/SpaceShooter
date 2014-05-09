@@ -19,8 +19,11 @@
 //different ammo
 //switch different ammo
 //power ups
-
 //enemies
+
+//gyro angle
+//level asteroids smaller
+//level more asteroids
 
 
 
@@ -115,7 +118,7 @@ typedef enum {
     CGSize size = CGSizeMake(4, 4);
     int strength = 2;
     int worth = 2;
-    float speed = 12;
+    CGFloat speed = 12;
     switch (type) {
         case BULLETS:
 //            filename = @"bullets.png";
@@ -150,9 +153,7 @@ typedef enum {
 }
 
 - (FlyingObject *)newAsteroid{
-    FlyingObject *asteroid = [[FlyingObject alloc] initWithImageNamed:@"asteroid.png" name:@"asteroid" strength:4 worth:2 direction:-1 speed:skRand(10, 20)];
-    
-//    FlyingObject *asteroid = [[FlyingObject alloc] initWithColor:[SKColor grayColor] size:CGSizeMake(32, 32) name:@"asteroid" strength:4 worth:2 direction:-1 speed:skRand(10, 20)];
+    FlyingObject *asteroid = [[FlyingObject alloc] initWithColor:[SKColor grayColor] size:CGSizeMake(32, 32) name:@"asteroid" strength:4 worth:2 direction:-1 speed:skRand(10, 20)];
     asteroid.hidden = YES;
     return asteroid;
 }
@@ -179,7 +180,6 @@ typedef enum {
     spaceship.physicsBody.affectedByGravity = NO;
     spaceship.physicsBody.mass = .01;
     spaceship.physicsBody.restitution = 0;
-    spaceship.color = [SKColor redColor];
     return spaceship;
 }
 
@@ -210,6 +210,11 @@ typedef enum {
     SKEmitterNode *explosion = [NSKeyedUnarchiver unarchiveObjectWithFile:explosionPath];
     explosion.targetNode = self;
     explosion.particlePosition = position;
+    
+    SKAction *wait = [SKAction waitForDuration:1];
+    [explosion runAction:wait completion:^{
+        [explosion removeFromParent];
+    }];
     return explosion;
 }
 
@@ -389,7 +394,7 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
         [self updateSpaceshipPositionFromGyro];
 
         //check for powerup collisions
-        FlyingObject *powerup = [self childNodeWithName:@"powerup"];
+        FlyingObject *powerup = (FlyingObject*)[self childNodeWithName:@"powerup"];
         if (powerup && [self.spaceship intersectsNode:powerup]){
             [powerup removeFromParent];
             [self runAction:[SKAction playSoundFileNamed:@"powerup.aiff" waitForCompletion:NO]];
@@ -416,26 +421,22 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
                     SKAction *blink = [SKAction sequence:@[[SKAction fadeOutWithDuration:.2], [SKAction fadeInWithDuration:.2]]];
                     SKAction *blinkTimes = [SKAction repeatAction:blink count:4];
                     [self.spaceship runAction:blinkTimes];
-                    break;
+                    
                 }
-                FlyingObject *toRemove = nil;
-                for (FlyingObject *ammo in self.ammunitionNodes){
+                SKSpriteNode *toRemove = nil;
+                for (SKSpriteNode *ammo in self.ammunitionNodes){
                     if (ammo.parent == NULL){
                         toRemove = ammo;
                     }
                     //check for asteroid collision with ammo
                     if ([ammo intersectsNode:asteroid]){
-                        asteroid.strength -= ammo.strength;
-                        if(asteroid.strength == 0){////////
-                            [self runAction:[SKAction playSoundFileNamed:@"fire_ball.wav" waitForCompletion:NO]];
-                            [self addChild:[self newExplosion:asteroid.position]];
-                            self.points += asteroid.worth;
-                            asteroid.hidden = YES;
-                            toRemove = ammo;
-                            [ammo removeFromParent];
-                        }
+                        [self runAction:[SKAction playSoundFileNamed:@"fire_ball.wav" waitForCompletion:NO]];
+                        [self addChild:[self newExplosion:asteroid.position]];
+                        self.points += asteroid.worth;
+                        asteroid.hidden = YES;
+                        toRemove = ammo;
+                        [ammo removeFromParent];
                     }
-                    break;
                 }
                 [self.ammunitionNodes removeObject:toRemove];
             }
@@ -484,7 +485,7 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
 
 - (void)moveSpaceshipToStartingPosition{
     float scaleTo =CGRectGetWidth(self.frame) / 10 / CGRectGetWidth(self.spaceship.frame);
-    SKAction *move = [SKAction moveTo:CGPointMake(CGRectGetMidX(self.frame), 50) duration:1];
+    SKAction *move = [SKAction moveTo:CGPointMake(CGRectGetMidX(self.frame), 100) duration:1];
     SKAction *scale = [SKAction scaleTo:scaleTo duration:1];
     [self.spaceship runAction:[SKAction group:@[move, scale]]];
 }

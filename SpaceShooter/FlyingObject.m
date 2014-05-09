@@ -20,12 +20,13 @@
     if (self == [super init]){
         self = [FlyingObject spriteNodeWithImageNamed:imageName];
         self.name = name;
-        self.strength = self.maxStrength = strength;
-        self.worth = worth;
-        self.direction = direction;
         self.speed = speed;
         self.color = [SKColor redColor];
         self.colorBlendFactor = 0;
+        self.strength = self.maxStrength = strength;
+        self.worth = worth;
+        self.direction = direction;
+        
     }
     return self;
 }
@@ -34,11 +35,12 @@
     if (self == [super init]){
         self = [FlyingObject spriteNodeWithColor:color size:size];
         self.name = name;
+        self.speed = speed;
+        self.color = color;
         self.strength = self.maxStrength = strength;
         self.worth = worth;
         self.direction = direction;
-        self.speed = speed;
-        self.color = color;
+
     }
     return self;
 }
@@ -86,8 +88,9 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
         moveTo = CGPointMake(self.position.x, size.height + self.size.height/2);
     }
     self.hidden = NO;
-    NSTimeInterval duration = size.height/self.speed + level;
-    SKAction *moveAction = [SKAction moveTo:moveTo duration:duration];
+    
+    NSTimeInterval duration = size.height/(self.speed * (1 + level/2));
+     SKAction *moveAction = [SKAction moveTo:moveTo duration:duration];
     [self runAction:moveAction completion:^{
         if (removeNotHidden) [self removeFromParent];
         else self.hidden = YES;
