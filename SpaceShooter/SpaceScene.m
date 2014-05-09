@@ -18,9 +18,10 @@
 //sounds level, powerup,
 //different ammo
 //switch different ammo
+//power ups
 
 //enemies
-//power ups
+
 
 
 @import CoreMotion;
@@ -149,7 +150,9 @@ typedef enum {
 }
 
 - (FlyingObject *)newAsteroid{
-    FlyingObject *asteroid = [[FlyingObject alloc] initWithColor:[SKColor grayColor] size:CGSizeMake(32, 32) name:@"asteroid" strength:4 worth:2 direction:-1 speed:skRand(10, 20)];
+    FlyingObject *asteroid = [[FlyingObject alloc] initWithImageNamed:@"asteroid.png" name:@"asteroid" strength:4 worth:2 direction:-1 speed:skRand(10, 20)];
+    
+//    FlyingObject *asteroid = [[FlyingObject alloc] initWithColor:[SKColor grayColor] size:CGSizeMake(32, 32) name:@"asteroid" strength:4 worth:2 direction:-1 speed:skRand(10, 20)];
     asteroid.hidden = YES;
     return asteroid;
 }
@@ -202,26 +205,12 @@ typedef enum {
     return stars;
 }
 
-- (SKEmitterNode * )newExplosion:(BOOL)initial{
-    NSString *starsPath = [[NSBundle mainBundle] pathForResource:@"Stars" ofType:@".sks"];
-    SKEmitterNode *stars = [NSKeyedUnarchiver unarchiveObjectWithFile:starsPath];
-    stars.targetNode = self;
-    int lifetime = ceil(sqrt((2 * self.size.height)/(stars.yAcceleration * -1)));//estimated initial velocity = 0 rather than v=10, insignificant .5 sec overestimate on ipad
-    int numOnScreen = lifetime * stars.particleBirthRate;
-    stars.particleLifetime = lifetime;
-    if (initial){
-        stars.name = @"initialStars";
-        stars.particleBirthRate = numOnScreen * 100;
-        stars.numParticlesToEmit = numOnScreen;
-        stars.particlePosition = CGPointMake(self.size.width/2.0, self.size.height/2);
-        stars.particlePositionRange = CGVectorMake(self.size.width, self.size.height);
-    }
-    else {
-        stars.name = @"stars";
-        stars.particlePosition = CGPointMake(self.size.width/2.0, self.size.height);
-        stars.particlePositionRange = CGVectorMake(self.size.width, 0);
-    }
-    return stars;
+- (SKEmitterNode * )newExplosion:(CGPoint)position{
+    NSString *explosionPath = [[NSBundle mainBundle] pathForResource:@"spark" ofType:@".sks"];
+    SKEmitterNode *explosion = [NSKeyedUnarchiver unarchiveObjectWithFile:explosionPath];
+    explosion.targetNode = self;
+    explosion.particlePosition = position;
+    return explosion;
 }
 
 - (SKNode *)newScoreboard{
@@ -414,6 +403,7 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
         //check for asteroid collisions
         for (FlyingObject *asteroid in self.asteroids) {
             if (!asteroid.hidden){
+                
                 //check for asteroid collision with spaceship
                 if ([self.spaceship intersectsNode:asteroid]){
                     [self runAction:[SKAction playSoundFileNamed:@"small_explosion.wav" waitForCompletion:NO]];
@@ -423,24 +413,29 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
                         [self endGame]; break;
                     }
                     asteroid.hidden = YES;
-                    
-                    //particle emmitter/////////
                     SKAction *blink = [SKAction sequence:@[[SKAction fadeOutWithDuration:.2], [SKAction fadeInWithDuration:.2]]];
                     SKAction *blinkTimes = [SKAction repeatAction:blink count:4];
                     [self.spaceship runAction:blinkTimes];
-                    
+                    break;
                 }
-                SKSpriteNode *toRemove = nil;
-                for (SKSpriteNode *ammo in self.ammunitionNodes){
+                FlyingObject *toRemove = nil;
+                for (FlyingObject *ammo in self.ammunitionNodes){
                     if (ammo.parent == NULL){
                         toRemove = ammo;
                     }
+                    //check for asteroid collision with ammo
                     if ([ammo intersectsNode:asteroid]){
-                        self.points += asteroid.worth;
-                        asteroid.hidden = YES;
-                        toRemove = ammo;
-                        [ammo removeFromParent];
+                        asteroid.strength -= ammo.strength;
+                        if(asteroid.strength == 0){////////
+                            [self runAction:[SKAction playSoundFileNamed:@"fire_ball.wav" waitForCompletion:NO]];
+                            [self addChild:[self newExplosion:asteroid.position]];
+                            self.points += asteroid.worth;
+                            asteroid.hidden = YES;
+                            toRemove = ammo;
+                            [ammo removeFromParent];
+                        }
                     }
+                    break;
                 }
                 [self.ammunitionNodes removeObject:toRemove];
             }

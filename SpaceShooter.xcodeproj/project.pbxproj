@@ -40,6 +40,8 @@
 		4A127BE9191C3CE200C31B4D /* spark.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4A127BE8191C3CE200C31B4D /* spark.sks */; };
 		4A127BF1191C4EA200C31B4D /* powerup.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A127BF0191C4EA200C31B4D /* powerup.png */; };
 		4A127BF3191C500100C31B4D /* powerup.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 4A127BF2191C500100C31B4D /* powerup.aiff */; };
+		4A127BF6191C5E6100C31B4D /* fire_ball.wav in Resources */ = {isa = PBXBuildFile; fileRef = 4A127BF5191C5E6100C31B4D /* fire_ball.wav */; };
+		4A127BF8191C62C700C31B4D /* asteroid.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A127BF7191C62C700C31B4D /* asteroid.png */; };
 		4AEDDCCF19197DB600690D75 /* FlyingObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AEDDCCE19197DB600690D75 /* FlyingObject.m */; };
 /* End PBXBuildFile section */
 
@@ -95,6 +97,8 @@
 		4A127BE8191C3CE200C31B4D /* spark.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = spark.sks; sourceTree = "<group>"; };
 		4A127BF0191C4EA200C31B4D /* powerup.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = powerup.png; sourceTree = "<group>"; };
 		4A127BF2191C500100C31B4D /* powerup.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = powerup.aiff; sourceTree = "<group>"; };
+		4A127BF5191C5E6100C31B4D /* fire_ball.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = fire_ball.wav; sourceTree = "<group>"; };
+		4A127BF7191C62C700C31B4D /* asteroid.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = asteroid.png; sourceTree = "<group>"; };
 		4AEDDCCD19197DB600690D75 /* FlyingObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlyingObject.h; sourceTree = "<group>"; };
 		4AEDDCCE19197DB600690D75 /* FlyingObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlyingObject.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -176,6 +180,7 @@
 				4A11FDA4191694C800EF8634 /* SpriteMyScene.m */,
 				4A11FDA6191694C800EF8634 /* Spaceship.png */,
 				4A127BF0191C4EA200C31B4D /* powerup.png */,
+				4A127BF7191C62C700C31B4D /* asteroid.png */,
 				4A11FDA8191694C800EF8634 /* Images.xcassets */,
 				4A11FD8F191694C800EF8634 /* Supporting Files */,
 			);
@@ -233,6 +238,7 @@
 				4A127BE2191C133F00C31B4D /* bullet2.wav */,
 				4A127BE4191C134600C31B4D /* bullet1.mp3 */,
 				4A127BF2191C500100C31B4D /* powerup.aiff */,
+				4A127BF5191C5E6100C31B4D /* fire_ball.wav */,
 			);
 			name = Sounds;
 			sourceTree = "<group>";
@@ -315,6 +321,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4A11FDA7191694C800EF8634 /* Spaceship.png in Resources */,
+				4A127BF8191C62C700C31B4D /* asteroid.png in Resources */,
 				4A127BDC191BFE8300C31B4D /* game_over.wav in Resources */,
 				4A11FDA9191694C800EF8634 /* Images.xcassets in Resources */,
 				4A11FD9F191694C800EF8634 /* Main_iPad.storyboard in Resources */,
@@ -331,6 +338,7 @@
 				4A127BE3191C133F00C31B4D /* bullet2.wav in Resources */,
 				4A127BE5191C134600C31B4D /* bullet1.mp3 in Resources */,
 				4A127BF1191C4EA200C31B4D /* powerup.png in Resources */,
+				4A127BF6191C5E6100C31B4D /* fire_ball.wav in Resources */,
 				4A127BD8191BFAAF00C31B4D /* bullet0.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
