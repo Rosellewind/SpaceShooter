@@ -22,9 +22,6 @@
 //enemies
 
 //gyro angle
-//level asteroids smaller
-//level more asteroids
-
 
 
 @import CoreMotion;
@@ -48,6 +45,8 @@ typedef enum {
 @property AmmunitionType selectedAmmunition;
 @property int level;
 @property (nonatomic, assign) int points;
+@property int powerupPoints;
+
 @property BOOL gameOver;
 
 @end
@@ -77,6 +76,7 @@ typedef enum {
 }
 
 - (void)createSceneContents{
+    self.powerupPoints = 0;//unnecessary?
     
     //ammunition
     self.ammunitionNodes = [NSMutableArray array];
@@ -153,7 +153,7 @@ typedef enum {
 }
 
 - (FlyingObject *)newAsteroid{
-    FlyingObject *asteroid = [[FlyingObject alloc] initWithColor:[SKColor grayColor] size:CGSizeMake(32, 32) name:@"asteroid" strength:4 worth:2 direction:-1 speed:skRand(10, 20)];
+    FlyingObject *asteroid = [[FlyingObject alloc] initWithColor:[SKColor grayColor] size:CGSizeMake(40, 40) name:@"asteroid" strength:4 worth:2 direction:-1 speed:skRand(10, 12)];
     asteroid.hidden = YES;
     return asteroid;
 }
@@ -270,6 +270,7 @@ typedef enum {
         CGFloat dx = 30.0 * data.rotationRate.x;
         if ([[UIDevice currentDevice] orientation] == UIInterfaceOrientationLandscapeLeft)
             dx = dx * -1;
+        
         [self.spaceship.physicsBody applyForce:CGVectorMake(dx, 0)];
     }
 }
@@ -294,7 +295,10 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
                 *stop = YES;
             }
         }];
-        self.nextAsteroidTime = currentTime + skRand(.5, 3);
+        float levelAdj = 1 + self.level/2;
+//        self.nextAsteroidTime = currentTime + skRand(levelAdj, levelAdj *1.1);
+        self.nextAsteroidTime = currentTime + 2.1 - (self.level * .1);
+
     }
 }
 
@@ -393,6 +397,8 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
         [self startPowerupIfNeeded:currentTime];
         [self updateSpaceshipPositionFromGyro];
 
+//        if ([self checkForPowerupCollision:])return;
+        
         //check for powerup collisions
         FlyingObject *powerup = (FlyingObject*)[self childNodeWithName:@"powerup"];
         if (powerup && [self.spaceship intersectsNode:powerup]){
@@ -400,6 +406,7 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
             [self runAction:[SKAction playSoundFileNamed:@"powerup.aiff" waitForCompletion:NO]];
             self.spaceship.strength += powerup.strength;
             [self updateStrengthboard];
+            self.powerupPoints += powerup.worth;
             self.points += powerup.worth;
             return;
             //animation?
@@ -423,6 +430,19 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
                     [self.spaceship runAction:blinkTimes];
                     
                 }
+                //check for asteroid off screen
+                else if (asteroid.position.y < asteroid.size.height && asteroid.strength > 0){
+                    SKAction *blink = [SKAction sequence:@[[SKAction fadeOutWithDuration:.2], [SKAction fadeInWithDuration:.2]]];
+                    SKAction *blinkTimes = [SKAction repeatAction:blink count:4];
+                    [asteroid runAction:blinkTimes];
+                    asteroid.strength = 0;
+                    self.spaceship.strength--;
+                    [self updateStrengthboard];
+                    if (self.spaceship.strength <= 0) {
+                        [self endGame]; break;
+                    }
+                }
+                
                 SKSpriteNode *toRemove = nil;
                 for (SKSpriteNode *ammo in self.ammunitionNodes){
                     if (ammo.parent == NULL){
@@ -445,8 +465,8 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
 }
 
 - (void)updateScoreboard{
-    //simple level algorithm, level every 20 points
-    while (self.level * 20 < self.points) {
+    //simple level algorithm, level every 15 points
+    while (self.level * 15 < self.points - self.powerupPoints) {
         self.level++;
         [self runAction:[SKAction playSoundFileNamed:@"level_up.mp3" waitForCompletion:NO]];
         [self displayLevelUp];
@@ -514,10 +534,9 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
                 return;
             }
         }
+        return;
     }
-    //do not process any more touches since it's game over
-    if (self.gameOver) return;
-    
+
     //shoot
     [self shoot:self.selectedAmmunition];
 }

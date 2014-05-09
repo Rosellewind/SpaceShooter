@@ -93,7 +93,10 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
      SKAction *moveAction = [SKAction moveTo:moveTo duration:duration];
     [self runAction:moveAction completion:^{
         if (removeNotHidden) [self removeFromParent];
-        else self.hidden = YES;
+        else{
+            self.strength = self.maxStrength;
+            self.hidden = YES;
+        }
     }];
 }
 
