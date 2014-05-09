@@ -153,7 +153,8 @@ typedef enum {
 }
 
 - (FlyingObject *)newAsteroid{
-    FlyingObject *asteroid = [[FlyingObject alloc] initWithColor:[SKColor grayColor] size:CGSizeMake(40, 40) name:@"asteroid" strength:4 worth:2 direction:-1 speed:skRand(10, 12)];
+    CGFloat width = self.size.width/20;
+    FlyingObject *asteroid = [[FlyingObject alloc] initWithColor:[SKColor grayColor] size:CGSizeMake(width, width) name:@"asteroid" strength:4 worth:2 direction:-1 speed:skRand(10, 12)];
     asteroid.hidden = YES;
     return asteroid;
 }
@@ -254,17 +255,40 @@ typedef enum {
 - (void)startMonitoringGyro{
     if (!self.motionManager) self.motionManager = [CMMotionManager new];
     if (self.motionManager.gyroAvailable) {
+//        [self.motionManager startDeviceMotionUpdates];
         [self.motionManager startGyroUpdates];
     }
 }
 
 - (void)stopMonitoringGyro{
     if (self.motionManager.gyroAvailable && self.motionManager.gyroActive) {
+//        [self.motionManager stopDeviceMotionUpdates];
         [self.motionManager stopGyroUpdates];
     }
 }
 
 - (void)updateSpaceshipPositionFromGyro{
+//    CMDeviceMotion *motion = self.motionManager.deviceMotion;
+//    CMRotationRate rotation = motion.rotationRate;
+//    CGFloat dx = 0;
+//    
+//    CGFloat x = 0;  //this block for testing
+//    int range = 1;
+//    if (rotation.x > range || rotation.x < range * -1)x = rotation.x;
+//    CGFloat y = 0;
+//    if (rotation.y > range || rotation.y < range * -1)y = rotation.y;
+//    CGFloat z = 0;
+//    if (rotation.z > range || rotation.z < range * -1)z = rotation.z;
+//    if (x != 0 || y != 0 || z != 0)
+//    NSLog(@"dat x: %f y: %f z: %f",x , y, z);
+//    
+//    if (rotation.x > 0.2) {
+//        dx += 30.0 * rotation.x;
+//        if ([[UIDevice currentDevice] orientation] == UIInterfaceOrientationLandscapeLeft)
+//            dx = dx * -1;
+//    }
+//    [self.spaceship.physicsBody applyForce:CGVectorMake(dx, 0)];
+    
     CMGyroData *data = self.motionManager.gyroData;
     if (fabs(data.rotationRate.x) > 0.2) {
         CGFloat dx = 30.0 * data.rotationRate.x;
@@ -505,7 +529,7 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
 
 - (void)moveSpaceshipToStartingPosition{
     float scaleTo =CGRectGetWidth(self.frame) / 10 / CGRectGetWidth(self.spaceship.frame);
-    SKAction *move = [SKAction moveTo:CGPointMake(CGRectGetMidX(self.frame), 100) duration:1];
+    SKAction *move = [SKAction moveTo:CGPointMake(CGRectGetMidX(self.frame), self.spaceship.size.height * scaleTo) duration:1];
     SKAction *scale = [SKAction scaleTo:scaleTo duration:1];
     [self.spaceship runAction:[SKAction group:@[move, scale]]];
 }
