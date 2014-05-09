@@ -25,6 +25,7 @@
         self.direction = direction;
         self.speed = speed;
         self.color = [SKColor redColor];
+        self.colorBlendFactor = 0;
     }
     return self;
 }
@@ -52,8 +53,10 @@
 #pragma mark - Getters and Setters
 
 - (void)setStrength:(int)strength{
-    _strength = strength;
-    self.colorBlendFactor = strength/(float)self.maxStrength;
+    if (strength > self.maxStrength)_strength = self.maxStrength;
+    else if (strength < 0)_strength = 0;
+    else _strength = strength;
+    self.colorBlendFactor = 1 - strength/(float)self.maxStrength;
 }
 
 #pragma mark - Random

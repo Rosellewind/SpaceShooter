@@ -21,7 +21,6 @@
 
 //enemies
 //power ups
-//indicate levelups
 
 
 @import CoreMotion;
@@ -40,17 +39,27 @@ typedef enum {
 @property (nonatomic, strong)FlyingObject *spaceship;
 @property (nonatomic, strong)NSMutableArray *asteroids;
 @property int nextAsteroidTime;
+@property int nextPowerupTime;
 @property NSMutableArray *ammunitionNodes;
 @property AmmunitionType selectedAmmunition;
 @property int level;
-@property int points;
+@property (nonatomic, assign) int points;
 @property BOOL gameOver;
 
 @end
 
 
-
 @implementation SpaceScene
+
+@synthesize points = _points;
+
+#pragma mark - Getters and Setters
+
+- (void)setPoints:(int)points{
+    if (points < 0) _points = 0;
+    else _points = points;
+    [self updateScoreboard];
+}
 
 #pragma mark - Set Up
 
@@ -154,6 +163,11 @@ typedef enum {
     return asteroids;
 }
 
+- (FlyingObject*)newPowerup{
+    FlyingObject *powerup = [[FlyingObject alloc]initWithImageNamed:@"powerup.png" name:@"powerup" strength:4 worth:20 direction:-1 speed:20];
+    return powerup;
+}
+
 - (FlyingObject *)newSpaceship{
     FlyingObject *spaceship = [[FlyingObject alloc]initWithImageNamed:@"Spaceship.png" name:@"spaceship" strength:SPACESHIP_STRENGTH worth:0 direction:0 speed:3];
     spaceship.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame));
@@ -167,6 +181,28 @@ typedef enum {
 }
 
 - (SKEmitterNode * )newStars:(BOOL)initial{     //gravity formula, t = sqrt((2 * d)/g)
+    NSString *starsPath = [[NSBundle mainBundle] pathForResource:@"Stars" ofType:@".sks"];
+    SKEmitterNode *stars = [NSKeyedUnarchiver unarchiveObjectWithFile:starsPath];
+    stars.targetNode = self;
+    int lifetime = ceil(sqrt((2 * self.size.height)/(stars.yAcceleration * -1)));//estimated initial velocity = 0 rather than v=10, insignificant 0.5 sec overestimate on ipad
+    int numOnScreen = lifetime * stars.particleBirthRate;
+    stars.particleLifetime = lifetime;
+    if (initial){
+        stars.name = @"initialStars";
+        stars.particleBirthRate = numOnScreen * 100;
+        stars.numParticlesToEmit = numOnScreen;
+        stars.particlePosition = CGPointMake(self.size.width/2.0, self.size.height/2);
+        stars.particlePositionRange = CGVectorMake(self.size.width, self.size.height);
+    }
+    else {
+        stars.name = @"stars";
+        stars.particlePosition = CGPointMake(self.size.width/2.0, self.size.height);
+        stars.particlePositionRange = CGVectorMake(self.size.width, 0);
+    }
+    return stars;
+}
+
+- (SKEmitterNode * )newExplosion:(BOOL)initial{
     NSString *starsPath = [[NSBundle mainBundle] pathForResource:@"Stars" ofType:@".sks"];
     SKEmitterNode *stars = [NSKeyedUnarchiver unarchiveObjectWithFile:starsPath];
     stars.targetNode = self;
@@ -268,6 +304,15 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
     }
 }
 
+- (void)startPowerupIfNeeded:(NSTimeInterval)currentTime{
+    if (self.nextPowerupTime < currentTime){
+        FlyingObject *powerup = [self newPowerup];
+        [self addChild:powerup];
+        [powerup flyAcrossScreenSize:self.size position:CGPointMake(-1, -1) forLevel:0 remove:YES];
+        self.nextPowerupTime = currentTime + skRand(20, 30);
+    }
+}
+
 #pragma mark - Shooting
 
 - (void)shoot:(AmmunitionType)type{
@@ -308,7 +353,7 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
     self.spaceship.strength = SPACESHIP_STRENGTH;
     self.level = 1;
     self.points = 0;
-    [self updateScoreboard];
+    [self updateStrengthboard];
     self.spaceship.colorBlendFactor = 0;
     self.spaceship.hidden = NO;
     self.gameOver = NO;
@@ -351,11 +396,25 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
 - (void)update:(NSTimeInterval)currentTime{
     if(!self.gameOver){
         [self startAsteroidIfNeeded:currentTime];
+        [self startPowerupIfNeeded:currentTime];
         [self updateSpaceshipPositionFromGyro];
 
-        //check for collisions
+        //check for powerup collisions
+        FlyingObject *powerup = [self childNodeWithName:@"powerup"];
+        if (powerup && [self.spaceship intersectsNode:powerup]){
+            [powerup removeFromParent];
+            [self runAction:[SKAction playSoundFileNamed:@"powerup.aiff" waitForCompletion:NO]];
+            self.spaceship.strength += powerup.strength;
+            [self updateStrengthboard];
+            self.points += powerup.worth;
+            return;
+            //animation?
+        }
+        
+        //check for asteroid collisions
         for (FlyingObject *asteroid in self.asteroids) {
             if (!asteroid.hidden){
+                //check for asteroid collision with spaceship
                 if ([self.spaceship intersectsNode:asteroid]){
                     [self runAction:[SKAction playSoundFileNamed:@"small_explosion.wav" waitForCompletion:NO]];
                     self.spaceship.strength -= asteroid.strength;
@@ -378,7 +437,6 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
                     }
                     if ([ammo intersectsNode:asteroid]){
                         self.points += asteroid.worth;
-                        [self updateScoreboard];
                         asteroid.hidden = YES;
                         toRemove = ammo;
                         [ammo removeFromParent];
@@ -470,8 +528,6 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
 
 - (void)handleSwipe:(UISwipeGestureRecognizer *)sender{
     if (sender.state == UIGestureRecognizerStateEnded && !self.gameOver){
-        //view to select ammo //////////////
-        NSLog(@"swipe----");
         if (sender.direction == UISwipeGestureRecognizerDirectionDown){
             if (self.selectedAmmunition == 3) self.selectedAmmunition = 0;
             else self.selectedAmmunition ++;
