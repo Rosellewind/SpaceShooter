@@ -28,6 +28,7 @@
     self.backgroundColor = [SKColor blueColor];
     self.scaleMode = SKSceneScaleModeAspectFit;
     
+    //label with name of the game
     SKLabelNode *label = [SKLabelNode labelNodeWithFontNamed:@"Helvetica"];
     label.text = @"Space Shooter";
     label.fontSize = 36;
@@ -38,6 +39,8 @@
 #pragma mark - Touches
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+    
+    //transition to next scene with doors
     SpaceScene *nextScene = [[SpaceScene alloc]initWithSize:self.size];
     SKTransition *doors = [SKTransition doorsOpenVerticalWithDuration:1];
     [self.view presentScene:nextScene transition:doors];

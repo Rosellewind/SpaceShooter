@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Roselle Milvich. All rights reserved.
 //
 
+// objective: get the most points by shooting the asteroids until you run out of strength.
+// game rules: Lose 1 for each asteroid that passes you, lose 3 if you crash into an asteroid.  More asteroids and faster asteroids as the levels go up.
+// to use: Tap screen to shoot, swipe up or down to change ammunition, gyro to move spaceship.
+
 //background
 //spaceship
 //gyroscope
@@ -21,7 +25,7 @@
 //power ups
 //enemies
 
-//gyro angle
+//instructions
 
 
 @import CoreMotion;
@@ -181,6 +185,7 @@ typedef enum {
     spaceship.physicsBody.affectedByGravity = NO;
     spaceship.physicsBody.mass = .01;
     spaceship.physicsBody.restitution = 0;
+    spaceship.physicsBody.allowsRotation = NO;
     return spaceship;
 }
 
@@ -456,6 +461,7 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
                 }
                 //check for asteroid off screen
                 else if (asteroid.position.y < asteroid.size.height && asteroid.strength > 0){
+                    [self runAction:[SKAction playSoundFileNamed:@"flyby.wav" waitForCompletion:NO]];
                     SKAction *blink = [SKAction sequence:@[[SKAction fadeOutWithDuration:.2], [SKAction fadeInWithDuration:.2]]];
                     SKAction *blinkTimes = [SKAction repeatAction:blink count:4];
                     [asteroid runAction:blinkTimes];

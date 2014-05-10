@@ -43,6 +43,7 @@
 		4A127BFA191C640E00C31B4D /* asteroid.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A127BF9191C640E00C31B4D /* asteroid.png */; };
 		4A127BFD191C841C00C31B4D /* smoke.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4A127BFC191C841C00C31B4D /* smoke.sks */; };
 		4A127BFF191C843300C31B4D /* magic.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4A127BFE191C843300C31B4D /* magic.sks */; };
+		4A127C03191EBE0900C31B4D /* flyby.wav in Resources */ = {isa = PBXBuildFile; fileRef = 4A127C02191EBE0900C31B4D /* flyby.wav */; };
 		4AEDDCCF19197DB600690D75 /* FlyingObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AEDDCCE19197DB600690D75 /* FlyingObject.m */; };
 /* End PBXBuildFile section */
 
@@ -100,6 +101,7 @@
 		4A127BF9191C640E00C31B4D /* asteroid.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = asteroid.png; sourceTree = "<group>"; };
 		4A127BFC191C841C00C31B4D /* smoke.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = smoke.sks; sourceTree = "<group>"; };
 		4A127BFE191C843300C31B4D /* magic.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = magic.sks; sourceTree = "<group>"; };
+		4A127C02191EBE0900C31B4D /* flyby.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = flyby.wav; sourceTree = "<group>"; };
 		4AEDDCCD19197DB600690D75 /* FlyingObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlyingObject.h; sourceTree = "<group>"; };
 		4AEDDCCE19197DB600690D75 /* FlyingObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlyingObject.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -238,6 +240,7 @@
 				4A127BE4191C134600C31B4D /* bullet1.mp3 */,
 				4A127BF2191C500100C31B4D /* powerup.aiff */,
 				4A127BF5191C5E6100C31B4D /* fire_ball.wav */,
+				4A127C02191EBE0900C31B4D /* flyby.wav */,
 			);
 			name = Sounds;
 			sourceTree = "<group>";
@@ -330,6 +333,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4A11FDA7191694C800EF8634 /* Spaceship.png in Resources */,
+				4A127C03191EBE0900C31B4D /* flyby.wav in Resources */,
 				4A127BDC191BFE8300C31B4D /* game_over.wav in Resources */,
 				4A11FDA9191694C800EF8634 /* Images.xcassets in Resources */,
 				4A127BFA191C640E00C31B4D /* asteroid.png in Resources */,

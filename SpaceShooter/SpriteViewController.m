@@ -41,7 +41,8 @@
 
 - (NSUInteger)supportedInterfaceOrientations
 {
-    return UIInterfaceOrientationMaskLandscape;
+    //just 1 supported to keep the gyro from changing polarity at 45 degrees
+    return UIInterfaceOrientationMaskLandscapeLeft;
 }
 
 - (void)didReceiveMemoryWarning
