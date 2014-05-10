@@ -31,6 +31,7 @@
 @import CoreMotion;
 #import "SpaceScene.h"
 #import "FlyingObject.h"
+#import "MenuScene.h"
 
 #define SPACESHIP_STRENGTH 10
 typedef enum {
@@ -394,29 +395,43 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
     [self stopMonitoringGyro];
     self.spaceship.hidden = YES;
     
+    //level and points label
     NSString *message = [NSString stringWithFormat:@"level: %i\npoints: %i",self.level, self.points];
     SKLabelNode *label;
     label = [SKLabelNode labelNodeWithFontNamed:@"Futura-CondensedMedium"];
     label.name = @"winLoseLabel";
     label.text = message;
-    label.scale = 0.1;
-    label.position = CGPointMake(self.frame.size.width/2, self.frame.size.height * 0.6);
+    label.scale = 0.5;
+    label.position = CGPointMake(self.frame.size.width/2, self.frame.size.height * 0.7);
     label.fontColor = [SKColor yellowColor];
     [self addChild:label];
     
+    //menu label
+    SKLabelNode *menuLabel;
+    menuLabel = [SKLabelNode labelNodeWithFontNamed:@"Futura-CondensedMedium"];
+    menuLabel.name = @"menuLabel";
+    menuLabel.text = @"Back to the Menu?";
+    menuLabel.scale = 0.5;
+    menuLabel.position = CGPointMake(self.frame.size.width/2, self.frame.size.height * 0.5);
+    menuLabel.fontColor = [SKColor yellowColor];
+    [self addChild:menuLabel];
+    
+    
+    //restart label
     SKLabelNode *restartLabel;
     restartLabel = [SKLabelNode labelNodeWithFontNamed:@"Futura-CondensedMedium"];
     restartLabel.name = @"restartLabel";
     restartLabel.text = @"Play Again?";
     restartLabel.scale = 0.5;
-    restartLabel.position = CGPointMake(self.frame.size.width/2, self.frame.size.height * 0.4);
+    restartLabel.position = CGPointMake(self.frame.size.width/2, self.frame.size.height * 0.3);
     restartLabel.fontColor = [SKColor yellowColor];
     [self addChild:restartLabel];
     
+    //start label actions
     SKAction *labelScaleAction = [SKAction scaleTo:1.0 duration:0.5];
-    
-    [restartLabel runAction:labelScaleAction];
     [label runAction:labelScaleAction];
+    [menuLabel runAction:labelScaleAction];
+    [restartLabel runAction:labelScaleAction];
 }
 
 #pragma mark - Run Loop and Updates
@@ -557,11 +572,16 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
     if (self.gameOver){
         for (UITouch *touch in touches) {
             SKNode *n = [self nodeAtPoint:[touch locationInNode:self]];
-            if (n != self && [n.name isEqual: @"restartLabel"]) {
+            if ([n.name isEqual: @"restartLabel"]) {
                 [[self childNodeWithName:@"restartLabel"] removeFromParent];
                 [[self childNodeWithName:@"winLoseLabel"] removeFromParent];
                 [self startTheGame];
                 return;
+            }
+            else if ([n.name isEqual: @"menuLabel"]){
+                SKTransition *revDoors = [SKTransition doorsCloseVerticalWithDuration:1];
+                MenuScene *nextScene = [[MenuScene alloc] initWithSize:self.size];
+                [self.view presentScene:nextScene transition:revDoors];
             }
         }
         return;
