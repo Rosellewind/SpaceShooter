@@ -8,6 +8,9 @@
 
 #import "FlyingObject.h"
 
+@interface FlyingObject()
+@end
+
 @implementation FlyingObject
 
 @synthesize strength = _strength;
@@ -85,7 +88,7 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
     } else{
         CGPoint positionBelowScreen = CGPointMake(x, y);
         self.position = positionBelowScreen;
-        moveTo = CGPointMake(self.position.x, size.height + self.size.height/2);
+        moveTo = CGPointMake(self.position.x, size.height);
     }
     self.hidden = NO;
     

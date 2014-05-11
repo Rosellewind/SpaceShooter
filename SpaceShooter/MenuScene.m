@@ -31,8 +31,8 @@
     //label with name of the game
     SKLabelNode *label = [SKLabelNode labelNodeWithFontNamed:@"Helvetica"];
     label.text = @"Space Shooter";
-    label.fontSize = 36;
-    label.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame) + label.fontSize * 2);
+    label.fontSize = 120;
+    label.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame) + label.fontSize);
     [self addChild:label];
     
     //instructions label
@@ -48,7 +48,7 @@
     startLabel.name = @"start";
     startLabel.text = @"Start";
     startLabel.fontSize = 36;
-    startLabel.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame) - label.fontSize * 2);
+    startLabel.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame) - startLabel.fontSize * 2);
     [self addChild:startLabel];
     
 

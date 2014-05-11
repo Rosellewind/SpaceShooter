@@ -14,6 +14,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    //observe if entering background
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(appWillEnterBackground)
+     name:UIApplicationWillResignActiveNotification
+     object:NULL];
 }
 
 - (void)viewWillLayoutSubviews{
@@ -34,6 +41,30 @@
     }
 }
 
+- (void)appWillEnterBackground
+{
+    SKView *skView = (SKView *)self.view;
+    skView.paused = YES;
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(appWillEnterForeground)
+     name:UIApplicationWillEnterForegroundNotification
+     object:NULL];
+}
+
+- (void)appWillEnterForeground
+{
+    SKView * skView = (SKView *)self.view;
+    skView.paused = NO;
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(appWillEnterBackground)
+     name:UIApplicationWillResignActiveNotification
+     object:NULL];
+}
+
 - (BOOL)shouldAutorotate
 {
     return YES;
@@ -41,7 +72,7 @@
 
 - (NSUInteger)supportedInterfaceOrientations
 {
-    //just 1 supported to keep the gyro from changing polarity at 45 degrees
+    //attempt to fix gyro issue on ipad
     return UIInterfaceOrientationMaskLandscapeLeft;
 }
 

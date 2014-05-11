@@ -10,23 +10,9 @@
 // game rules: Lose 1 for each asteroid that passes you, lose 3 if you crash into an asteroid.  More asteroids and faster asteroids as the levels go up.
 // to use: Tap screen to shoot, swipe up or down to change ammunition, gyro to move spaceship.
 
-//background
-//spaceship
-//gyroscope
-//asteroids
-//bullets
-//scoreboard
-//collision detection
-//levels by points
-//level indicator
-//sounds level, powerup,
-//different ammo
-//switch different ammo
-//power ups
-//enemies
-
-//instructions
-
+// known bugs:
+//      gyro works good on iphone, on ipad it changes polarity at 45 degrees
+//      needs to have limited ammunition so that firing a line of bullets across the screen doesn't work.
 
 @import CoreMotion;
 #import "SpaceScene.h"
@@ -81,8 +67,6 @@ typedef enum {
 }
 
 - (void)createSceneContents{
-    self.powerupPoints = 0;//unnecessary?
-    
     //ammunition
     self.ammunitionNodes = [NSMutableArray array];
     self.selectedAmmunition = BULLETS;
@@ -116,6 +100,9 @@ typedef enum {
     CGRect physicsFrame = CGRectMake(0 - offset, 0, self.size.width + offset*2, self.size.height);
     self.physicsBody = [SKPhysicsBody bodyWithEdgeLoopFromRect:physicsFrame];
     self.physicsBody.restitution = 0;
+    
+    //init sound player (prevents stutter on first played sound)
+    SKAction *emptySound = [SKAction playSoundFileNamed:@"flyby.wav" waitForCompletion:NO];
 }
 
 - (FlyingObject *)newAmmunitionSingle:(AmmunitionType)type{
@@ -325,8 +312,6 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
                 *stop = YES;
             }
         }];
-        float levelAdj = 1 + self.level/2;
-//        self.nextAsteroidTime = currentTime + skRand(levelAdj, levelAdj *1.1);
         self.nextAsteroidTime = currentTime + 2.1 - (self.level * .1);
 
     }
@@ -488,8 +473,8 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
                     }
                 }
                 
-                SKSpriteNode *toRemove = nil;
-                for (SKSpriteNode *ammo in self.ammunitionNodes){
+                FlyingObject *toRemove = nil;
+                for (FlyingObject *ammo in self.ammunitionNodes){
                     if (ammo.parent == NULL){
                         toRemove = ammo;
                     }
@@ -575,6 +560,7 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
             if ([n.name isEqual: @"restartLabel"]) {
                 [[self childNodeWithName:@"restartLabel"] removeFromParent];
                 [[self childNodeWithName:@"winLoseLabel"] removeFromParent];
+                [[self childNodeWithName:@"menuLabel"] removeFromParent];
                 [self startTheGame];
                 return;
             }
@@ -605,5 +591,6 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
         [self showChosenAmmunition];
     }
 }
+
 
 @end
