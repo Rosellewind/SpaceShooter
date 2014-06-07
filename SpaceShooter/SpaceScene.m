@@ -6,12 +6,9 @@
 //  Copyright (c) 2014 Roselle Milvich. All rights reserved.
 //
 
-// objective: get the most points by shooting the asteroids until you run out of strength.
-// game rules: Lose 1 for each asteroid that passes you, lose 3 if you crash into an asteroid.  More asteroids and faster asteroids as the levels go up.  Your bullets are refilled every 10 seconds.
-// to use: Tap screen to shoot, swipe up or down to change ammunition, gyro to move spaceship.
-
 //known bugs;
 //      image for asteroids
+//      gyro works better on iphone, ipad not so great
 
 
 
