@@ -7,12 +7,14 @@
 //
 
 // objective: get the most points by shooting the asteroids until you run out of strength.
-// game rules: Lose 1 for each asteroid that passes you, lose 3 if you crash into an asteroid.  More asteroids and faster asteroids as the levels go up.
+// game rules: Lose 1 for each asteroid that passes you, lose 3 if you crash into an asteroid.  More asteroids and faster asteroids as the levels go up.  Your bullets are refilled every 10 seconds.
 // to use: Tap screen to shoot, swipe up or down to change ammunition, gyro to move spaceship.
 
-// known bugs:
-//      gyro works good on iphone, on ipad it changes polarity at 45 degrees
-//      needs to have limited ammunition so that firing a line of bullets across the screen doesn't work.
+//known bugs;
+//      image for asteroids
+
+
+
 
 @import CoreMotion;
 #import "SpaceScene.h"
@@ -37,7 +39,10 @@ typedef enum {
 @property int level;
 @property (nonatomic, assign) int points;
 @property int powerupPoints;
-
+@property int nextAmmunitionRefill;
+@property int pauseTime;
+@property int numBullets;
+@property int maxNumBullets;
 @property BOOL gameOver;
 
 @end
@@ -63,11 +68,15 @@ typedef enum {
         [self moveSpaceshipToStartingPosition];
         [self addGestureRecognizers];
         [self startTheGame];
+        
+        // observe pausing
+        [self.view addObserver:self forKeyPath:@"paused" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
     }
 }
 
 - (void)createSceneContents{
     //ammunition
+    self.numBullets = self.maxNumBullets = 20;
     self.ammunitionNodes = [NSMutableArray array];
     self.selectedAmmunition = BULLETS;
     
@@ -94,6 +103,9 @@ typedef enum {
     
     //scoreboard
     [self addChild:[self newScoreboard]];
+    
+    //ammunitionBoard
+    [self addChild:[self newAmmunitionBoard]];
     
     //physics body frame
     float offset = self.size.width / 20;
@@ -233,6 +245,27 @@ typedef enum {
     return board;
 }
 
+- (SKNode *)newAmmunitionBoard{
+    SKLabelNode *bulletsBoard = [SKLabelNode labelNodeWithFontNamed:@"Futura-CondensedMedium"];
+    bulletsBoard.name = @"bulletsBoard";
+    bulletsBoard.position = CGPointMake(0, 28);
+    bulletsBoard.fontSize = 24;
+    bulletsBoard.text = [NSString stringWithFormat:@"%i bullets",self.numBullets];
+    bulletsBoard.horizontalAlignmentMode = SKLabelHorizontalAlignmentModeCenter;
+    SKLabelNode *refillBoard = [SKLabelNode labelNodeWithFontNamed:@"Futura-CondensedMedium"];
+    refillBoard.name = @"refillBoard";
+    refillBoard.position = CGPointMake(0, 0);
+    refillBoard.fontSize = 24;
+    refillBoard.text = [NSString stringWithFormat:@"%i till refill",0];
+    
+    SKNode *ammunitionBoard = [[SKNode alloc]init];
+    ammunitionBoard.name = @"ammunitionBoard";
+    [ammunitionBoard addChild:bulletsBoard];
+    [ammunitionBoard addChild:refillBoard];
+    ammunitionBoard.position = CGPointMake(self.size.width * .9, self.size.height * .95 - 48);
+    return ammunitionBoard;
+}
+
 - (void)addGestureRecognizers{
     UISwipeGestureRecognizer *up = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(handleSwipe:)];
     up.direction = UISwipeGestureRecognizerDirectionUp;
@@ -261,11 +294,9 @@ typedef enum {
 }
 
 - (void)updateSpaceshipPositionFromGyro{
-//    CMDeviceMotion *motion = self.motionManager.deviceMotion;
-//    CMRotationRate rotation = motion.rotationRate;
-//    CGFloat dx = 0;
-//    
-//    CGFloat x = 0;  //this block for testing
+    CMRotationRate rotation = self.motionManager.gyroData.rotationRate;
+
+//    CGFloat x = 0;  //this block is for testing
 //    int range = 1;
 //    if (rotation.x > range || rotation.x < range * -1)x = rotation.x;
 //    CGFloat y = 0;
@@ -274,21 +305,18 @@ typedef enum {
 //    if (rotation.z > range || rotation.z < range * -1)z = rotation.z;
 //    if (x != 0 || y != 0 || z != 0)
 //    NSLog(@"dat x: %f y: %f z: %f",x , y, z);
-//    
-//    if (rotation.x > 0.2) {
-//        dx += 30.0 * rotation.x;
-//        if ([[UIDevice currentDevice] orientation] == UIInterfaceOrientationLandscapeLeft)
-//            dx = dx * -1;
-//    }
-//    [self.spaceship.physicsBody applyForce:CGVectorMake(dx, 0)];
-    
-    CMGyroData *data = self.motionManager.gyroData;
-    if (fabs(data.rotationRate.x) > 0.2) {
-        CGFloat dx = 30.0 * data.rotationRate.x;
-        if ([[UIDevice currentDevice] orientation] == UIInterfaceOrientationLandscapeLeft)
-            dx = dx * -1;
-        
-        [self.spaceship.physicsBody applyForce:CGVectorMake(dx, 0)];
+
+    if (fabs(rotation.x) > fabs(rotation.z)){
+        if (fabs(rotation.x) > 0.2) {
+            CGFloat dx = -30.0 * rotation.x;
+            if ([[UIApplication sharedApplication]statusBarOrientation] == UIInterfaceOrientationLandscapeRight)//just needed for x
+                dx = dx * -1;
+            [self.spaceship.physicsBody applyForce:CGVectorMake(dx, 0)];
+        }
+    }
+    else if (fabs(rotation.z) > 0.2){
+        CGFloat dz = -30.0 * rotation.z;
+        [self.spaceship.physicsBody applyForce:CGVectorMake(dz, 0)];
     }
 }
 
@@ -329,13 +357,16 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
 #pragma mark - Shooting
 
 - (void)shoot:(AmmunitionType)type{
-    FlyingObject *ammo = [self newAmmunitionSingle:type];
-    [self.ammunitionNodes addObject:ammo];
-    [self addChild:ammo];
-    CGPoint position = CGPointMake(self.spaceship.position.x, self.spaceship.position.y + self.spaceship.size.height/2);
-    
-    [self playSoundForAmmunition:self.selectedAmmunition];
-    [ammo flyAcrossScreenSize:self.size position:position forLevel:self.level remove:YES];
+    if (self.numBullets > 0){
+        FlyingObject *ammo = [self newAmmunitionSingle:type];
+        [self.ammunitionNodes addObject:ammo];
+        [self addChild:ammo];
+        CGPoint position = CGPointMake(self.spaceship.position.x, self.spaceship.position.y + self.spaceship.size.height/2);
+        
+        [self playSoundForAmmunition:self.selectedAmmunition];
+        [ammo flyAcrossScreenSize:self.size position:position forLevel:self.level remove:YES];
+        self.numBullets--;
+    }
 }
 
 - (void)showChosenAmmunition{
@@ -366,6 +397,8 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
     self.spaceship.strength = SPACESHIP_STRENGTH;
     self.level = 1;
     self.points = 0;
+    self.powerupPoints = 0;
+    self.nextAmmunitionRefill = 0;
     [self updateStrengthboard];
     self.spaceship.colorBlendFactor = 0;
     self.spaceship.hidden = NO;
@@ -379,6 +412,9 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
     [self runAction:[SKAction playSoundFileNamed:@"game_over.wav" waitForCompletion:NO]];
     [self stopMonitoringGyro];
     self.spaceship.hidden = YES;
+    for (FlyingObject *asteroid in self.asteroids){
+        asteroid.hidden = YES;
+    }
     
     //level and points label
     NSString *message = [NSString stringWithFormat:@"level: %i\npoints: %i",self.level, self.points];
@@ -426,6 +462,13 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
         [self startPowerupIfNeeded:currentTime];
         [self updateSpaceshipPositionFromGyro];
 
+        //check if time to refill bullets
+        if (self.nextAmmunitionRefill < currentTime){
+            self.numBullets = self.maxNumBullets;
+            self.nextAmmunitionRefill = currentTime + 10;
+        }
+        [self updateAmmunitionBoard:currentTime];
+        
 //        if ([self checkForPowerupCollision:])return;
         
         //check for powerup collisions
@@ -512,6 +555,15 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
     strengthboard.text = [NSString stringWithFormat:@"strength: %i",self.spaceship.strength];
 }
 
+- (void)updateAmmunitionBoard:(NSTimeInterval)currentTime{
+    SKNode *board = [self childNodeWithName:@"ammunitionBoard"];
+    SKLabelNode *bulletsBoard = (SKLabelNode *)[board childNodeWithName:@"bulletsBoard"];
+    bulletsBoard.text = [NSString stringWithFormat:@"%i bullets",self.numBullets];
+    SKLabelNode *refillBoard = (SKLabelNode *)[board childNodeWithName:@"refillBoard"];
+    int timeLeft = self.nextAmmunitionRefill - currentTime;
+    refillBoard.text = [NSString stringWithFormat:@"%i till refill",timeLeft];
+}
+
 - (void)displayLevelUp{
     SKLabelNode *levelLabel;
     levelLabel = [SKLabelNode labelNodeWithFontNamed:@"Futura-CondensedMedium"];
@@ -589,6 +641,27 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
         }
         NSLog(@"ammo: %i", self.selectedAmmunition);
         [self showChosenAmmunition];
+    }
+}
+
+#pragma mark - Observing
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+    if ([keyPath isEqualToString:@"paused"]){
+        BOOL newValue = [[change objectForKey: NSKeyValueChangeNewKey] boolValue];
+        BOOL oldValue = [[change objectForKey: NSKeyValueChangeOldKey] boolValue];
+        if (newValue != oldValue){
+            if (newValue ==YES){//is paused
+                self.pauseTime = CACurrentMediaTime();
+                NSLog(@"pause: %i",self.pauseTime);
+            } else{ //is not paused
+                NSLog(@"previousRefillTime: %i",self.nextAmmunitionRefill);
+
+                self.nextAmmunitionRefill += CACurrentMediaTime() - self.pauseTime;
+                NSLog(@"now: %f pause: %i next: %i", CACurrentMediaTime(),self.pauseTime, self.nextAmmunitionRefill);
+
+            }
+        }
     }
 }
 

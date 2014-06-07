@@ -92,7 +92,7 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
     }
     self.hidden = NO;
     
-    NSTimeInterval duration = size.height/(self.speed * (1 + level/2));
+    NSTimeInterval duration = size.height/(self.speed * (1 + level/4));
      SKAction *moveAction = [SKAction moveTo:moveTo duration:duration];
     [self runAction:moveAction completion:^{
         if (removeNotHidden) [self removeFromParent];
@@ -102,7 +102,6 @@ static inline CGFloat skRand(CGFloat low, CGFloat high){
         }
     }];
 }
-
 
 
 @end

@@ -72,8 +72,7 @@
 
 - (NSUInteger)supportedInterfaceOrientations
 {
-    //attempt to fix gyro issue on ipad
-    return UIInterfaceOrientationMaskLandscapeLeft;
+    return UIInterfaceOrientationMaskLandscape;
 }
 
 - (void)didReceiveMemoryWarning

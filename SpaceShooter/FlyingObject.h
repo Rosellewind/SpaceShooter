@@ -19,5 +19,4 @@
 - (id)initWithColor:(SKColor *)color size:(CGSize)size name:(NSString *)name strength:(int)strength worth:(int)worth direction:(int)direction speed:(CGFloat)speed;
 - (void)flyAcrossScreenSize:(CGSize)size position:(CGPoint)position forLevel:(int)level remove:(BOOL)removeNotHidden;
 
-
 @end
